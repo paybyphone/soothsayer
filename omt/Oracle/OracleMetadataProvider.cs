@@ -7,9 +7,9 @@ namespace omt.Oracle
 {
     public class OracleMetadataProvider : IDatabaseMetadataProvider
     {
-         private readonly IDbConnection _connection;
+        private readonly IDbConnection _connection;
 
-         public OracleMetadataProvider(IDbConnection connection)
+        public OracleMetadataProvider(IDbConnection connection)
         {
             _connection = connection;
         }

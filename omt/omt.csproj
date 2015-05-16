@@ -55,6 +55,7 @@
       <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data.OracleClient" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\DatabaseCommand.cs" />
@@ -65,7 +66,6 @@
     <Compile Include="Infrastructure\ConfigSection.cs" />
     <Compile Include="Infrastructure\ISecureConsole.cs" />
     <Compile Include="Oracle\Configuration\ISqlPlusConfiguration.cs" />
-    <Compile Include="Oracle\Configuration\Configuration.cs" />
     <Compile Include="Infrastructure\MissingConfigurationSectionException.cs" />
     <Compile Include="Infrastructure\MIssingConfigurationValueException.cs" />
     <Compile Include="Infrastructure\PropertyName.cs" />
@@ -123,6 +123,8 @@
     <Compile Include="TinyIoC.cs" />
     <Compile Include="Infrastructure\Slice.cs" />
     <Compile Include="Infrastructure\SliceExtensions.cs" />
+    <Compile Include="Oracle\Configuration\SqlPlusConfiguration.cs" />
+    <Compile Include="Oracle\OracleErrors.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

@@ -34,6 +34,7 @@ namespace omt.Tests.Commands
     internal class TestDatabaseCommandOptions : IDatabaseCommandOptions
     {
         public string Username { get; set; }
+
         public string Password { get; set; }
     }
 
@@ -43,7 +44,8 @@ namespace omt.Tests.Commands
 
     internal class TestDatabaseCommand : DatabaseCommand<TestCommandOptions>
     {
-        public TestDatabaseCommand(ISecureConsole secureConsole) : base(secureConsole)
+        public TestDatabaseCommand(ISecureConsole secureConsole)
+            : base(secureConsole)
         {
         }
 
@@ -57,7 +59,7 @@ namespace omt.Tests.Commands
             get { return "description"; }
         }
 
-		protected override void ExecuteCore(string[] arguments)
+        protected override void ExecuteCore(string[] arguments)
         {
         }
 

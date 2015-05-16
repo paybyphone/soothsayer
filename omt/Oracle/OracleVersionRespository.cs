@@ -26,7 +26,7 @@ namespace omt.Oracle
             }
             catch (OracleException oracleException)
             {
-                if (oracleException.Message.Equals("ORA-00942: table or view does not exist"))
+                if (oracleException.IsFor(OracleErrors.TableOrViewDoesNotExist))
                 {
                     Output.Warn("Version table in schema '{0}' could not be found.".FormatWith(schema));
                     return Enumerable.Empty<DatabaseVersion>();
@@ -46,7 +46,7 @@ namespace omt.Oracle
             }
             catch (OracleException oracleException)
             {
-                if (oracleException.Message.Equals("ORA-00942: table or view does not exist"))
+                if (oracleException.IsFor(OracleErrors.TableOrViewDoesNotExist))
                 {
                     Output.Warn("Version table in schema '{0}' could not be found.".FormatWith(schema));
                     return null;
@@ -66,7 +66,7 @@ namespace omt.Oracle
             }
             catch (OracleException oracleException)
             {
-                if (oracleException.Message.Equals("ORA-00942: table or view does not exist"))
+                if (oracleException.IsFor(OracleErrors.TableOrViewDoesNotExist))
                 {
                     Output.Warn("Version table in schema '{0}' could not be found.".FormatWith(schema));
                     return false;
@@ -89,7 +89,7 @@ namespace omt.Oracle
             }
             catch (OracleException oracleException)
             {
-                if (oracleException.Message.Equals("ORA-00942: table or view does not exist"))
+                if (oracleException.IsFor(OracleErrors.TableOrViewDoesNotExist))
                 {
                     Output.Warn("Version table in schema '{0}' could not be found, version not recorded.".FormatWith(schema));
                     return;
@@ -111,7 +111,7 @@ namespace omt.Oracle
             }
             catch (OracleException oracleException)
             {
-                if (oracleException.Message.Equals("ORA-00942: table or view does not exist"))
+                if (oracleException.IsFor(OracleErrors.TableOrViewDoesNotExist))
                 {
                     Output.Warn("Version table in schema '{0}' could not be found, version not removed.".FormatWith(schema));
                     return;
