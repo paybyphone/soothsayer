@@ -15,6 +15,8 @@ namespace omt.Commands
         }
 
         public abstract string CommandText { get; }
+        public abstract string Description { get; }
+
         public T Options { get { return new T(); } }
 		protected abstract void ExecuteCore(string[] arguments);
 

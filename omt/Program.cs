@@ -1,69 +1,74 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using omt.Commands;
 using omt.Infrastructure;
-using System;
-using System.Reflection;
 using TinyIoC;
 
 namespace omt
 {
-    public class Program
-    {
-        internal class ExitCode
-        {
-            public const int Normal = 0;
-            public const int NoCommand = 1;
-            public const int BadCommand = 2;
-        }
+	public class Program
+	{
+		internal static class ExitCode
+		{
+			public static readonly int Normal = 0;
+			public static readonly int NoCommand = 1;
+			public static readonly int BadCommand = 2;
+		}
 
-        public static void Main(string[] args)
-        {
-            if (!args.Any())
-            {
-                PrintHelp();
+		public static void Main(string[] args)
+		{
+			using (var container = TinyIoCContainer.Current)
+			{
+				container.AutoRegister(DuplicateImplementationActions.RegisterMultiple);
 
-                Environment.Exit(ExitCode.NoCommand);
-            }
+				var supportedCommands = container.ResolveAll<ICommand>();
 
-            var commandArgument = args[0];
-            var remainingArgs = args.Between(1).And(args.Length);
-            var foundMatchingCommand = false;
+				if (!args.Any())
+				{
+					PrintHelp(supportedCommands);
 
-            using (var container = TinyIoCContainer.Current)
-            {
-                container.AutoRegister(DuplicateImplementationActions.RegisterMultiple);
+					Environment.Exit(ExitCode.NoCommand);
+				}
 
-                var commands = container.ResolveAll<ICommand>();
+				var commandArgument = args.First();
+				var remainingArgs = args.Between(1).And(args.Length);
+				var foundMatchingCommand = false;
 
-                foreach (var command in commands)
-                {
-                    if (command.CommandText.Equals(commandArgument))
-                    {
-                        foundMatchingCommand = true;
-                        command.Execute(remainingArgs);
+				foreach (var command in supportedCommands)
+				{
+					if (command.CommandText.Equals(commandArgument))
+					{
+						foundMatchingCommand = true;
+						command.Execute(remainingArgs);
 
-                        break;
-                    }
-                }
+						break;
+					}
+				}
 
-                if (!foundMatchingCommand)
-                {
-                    Output.Text("Invalid command specified '{0}'".FormatWith(commandArgument));
-                    Environment.Exit(ExitCode.BadCommand);
-                }
-            }
+				if (!foundMatchingCommand)
+				{
+					Output.Text("Invalid command specified '{0}'".FormatWith(commandArgument));
+					Environment.Exit(ExitCode.BadCommand);
+				}
+			}
 
-            Environment.Exit(ExitCode.Normal);
-        }
+			Environment.Exit(ExitCode.Normal);
+		}
 
-        private static void PrintHelp()
-        {
-            Output.Info("omt {0}-beta".FormatWith(Assembly.GetExecutingAssembly().GetName().Version));
-            Output.EmptyLine();
-            Output.Info("Supported commands:");
-            Output.Text("  list\t\t\tDisplay a list of existing versions.");
-            Output.Text("  migrate\t\tRun a database migration.");
-            Output.EmptyLine();
-        }
-    }
+		private static void PrintHelp(IEnumerable<ICommand> supportedCommands)
+		{
+			Output.Info("omt {0}-beta".FormatWith(Assembly.GetExecutingAssembly().GetName().Version));
+			Output.EmptyLine();
+			Output.Info("Supported commands:");
+
+			foreach (var supportedCommand in supportedCommands)
+			{
+				Output.Text("  {0}\t\t\t{1}".FormatWith(supportedCommand.CommandText, supportedCommand.Description));
+			}
+
+			Output.EmptyLine();
+		}
+	}
 }

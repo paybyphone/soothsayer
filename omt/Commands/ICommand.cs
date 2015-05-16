@@ -11,6 +11,7 @@ namespace omt.Commands
     public interface ICommand
     {
         string CommandText { get; }
+        string Description { get; }
 		void Execute(IEnumerable<string> arguments);
     }
 }

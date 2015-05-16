@@ -8,7 +8,8 @@ namespace omt.Commands
     {
         private readonly IMigrator _migrator;
 
-        public MigrateCommand(ISecureConsole secureConsole, IMigrator migrator) : base(secureConsole)
+        public MigrateCommand(ISecureConsole secureConsole, IMigrator migrator)
+            : base(secureConsole)
         {
             _migrator = migrator;
         }
@@ -16,6 +17,11 @@ namespace omt.Commands
         public override string CommandText
         {
             get { return "migrate"; }
+        }
+
+        public override string Description
+        { 
+            get { return "Run a database migration."; }
         }
 
         protected override void ExecuteCore(string[] arguments)
@@ -45,12 +51,12 @@ namespace omt.Commands
 
                 var databaseConnectionInfo = new DatabaseConnectionInfo(migrateCommandOptions.ConnectionString, migrateCommandOptions.Username, password);
                 var migrationInfo = new MigrationInfo(migrateCommandOptions.Down ? MigrationDirection.Down : MigrationDirection.Up,
-                    migrateCommandOptions.InputFolder,
-                    migrateCommandOptions.Schema,
-                    migrateCommandOptions.Tablespace,
-                    migrateCommandOptions.Environment,
-                    migrateCommandOptions.Version,
-                    migrateCommandOptions.Force);
+                                        migrateCommandOptions.InputFolder,
+                                        migrateCommandOptions.Schema,
+                                        migrateCommandOptions.Tablespace,
+                                        migrateCommandOptions.Environment,
+                                        migrateCommandOptions.Version,
+                                        migrateCommandOptions.Force);
 
                 _migrator.Migrate(databaseConnectionInfo, migrationInfo);
 

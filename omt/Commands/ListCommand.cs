@@ -11,13 +11,22 @@ namespace omt.Commands
         private readonly IConnectionFactory _connectionFactory;
         private readonly IVersionRespositoryFactory _versionRespositoryFactory;
 
-        public ListCommand(ISecureConsole secureConsole, IConnectionFactory connectionFactory, IVersionRespositoryFactory versionRespositoryFactory) : base(secureConsole)
+        public ListCommand(ISecureConsole secureConsole, IConnectionFactory connectionFactory, IVersionRespositoryFactory versionRespositoryFactory)
+            : base(secureConsole)
         {
             _connectionFactory = connectionFactory;
             _versionRespositoryFactory = versionRespositoryFactory;
         }
 
-        public override string CommandText { get { return "list"; } }
+        public override string CommandText
+        { 
+            get { return "list"; }
+        }
+
+        public override string Description
+        { 
+            get { return "Display a list of existing versions."; }
+        }
 
         protected override void ExecuteCore(string[] arguments)
         {

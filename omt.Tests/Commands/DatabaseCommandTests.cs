@@ -52,6 +52,11 @@ namespace omt.Tests.Commands
             get { return "test"; }
         }
 
+        public override string Description
+        {
+            get { return "description"; }
+        }
+
 		protected override void ExecuteCore(string[] arguments)
         {
         }
