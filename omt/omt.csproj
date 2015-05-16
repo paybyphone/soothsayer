@@ -68,7 +68,6 @@
     <Compile Include="Oracle\Configuration\ISqlPlusConfiguration.cs" />
     <Compile Include="Infrastructure\MissingConfigurationSectionException.cs" />
     <Compile Include="Infrastructure\MIssingConfigurationValueException.cs" />
-    <Compile Include="Infrastructure\PropertyName.cs" />
     <Compile Include="IOptions.cs" />
     <Compile Include="ListCommandOptions.cs" />
     <Compile Include="DatabaseConnectionInfo.cs" />
@@ -125,6 +124,7 @@
     <Compile Include="Infrastructure\SliceExtensions.cs" />
     <Compile Include="Oracle\Configuration\SqlPlusConfiguration.cs" />
     <Compile Include="Oracle\OracleErrors.cs" />
+    <Compile Include="Infrastructure\Name.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

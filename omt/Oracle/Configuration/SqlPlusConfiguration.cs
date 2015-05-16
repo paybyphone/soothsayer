@@ -14,7 +14,7 @@ namespace omt.Oracle.Configuration
 
         public string RunnerPath
         {
-            get { return _configuration.GetConfigurationValue<string>(PropertyName.For(() => RunnerPath)); }
+            get { return _configuration.GetConfigurationValue<string>(Name.For(() => RunnerPath)); }
         }
     }
 }

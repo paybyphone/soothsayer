@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace omt.Infrastructure
 {
-    public static class PropertyName
+    public static class Name
     {
         public static string For(Expression<Func<object>> exp)
         {

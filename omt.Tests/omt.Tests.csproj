@@ -67,6 +67,7 @@
     <Compile Include="Oracle\SqlPlusScriptRunnerTests.cs" />
     <Compile Include="Oracle\Configuration\SqlPlusConfigurationTests.cs" />
     <Compile Include="Oracle\OracleConnectionFactoryTests.cs" />
+    <Compile Include="Infrastructure\NameTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
