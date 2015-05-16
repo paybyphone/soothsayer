@@ -64,7 +64,7 @@ Only scripts which either do not specify an environment, or match the specified 
 By default, the environment is set to `qa`.
 
 ## Configuration ##
-_omt_ requires a single configuration setting — RunnerPath — which should be set to the path of _SQL*Plus_ on your machine. The installer for _SQL*Plus_ is made available by Oracle as part of their _Instant Client_ tools.
+_omt_ requires a single configuration setting — `RunnerPath` — which should be set to the path of the _SQL*Plus_ executable. The installer for _SQL*Plus_ is made available by Oracle as part of their _Instant Client_ tools.
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
