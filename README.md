@@ -1,6 +1,6 @@
 # omt - Overview #
 
-omt is a command-line tool for applying a set of organised scripts to a target Oracle database. It can be used as a mechanism for incremental migrations and database version tracking.
+_omt_ is a command-line tool for applying a set of organised _SQL*Plus_ scripts to a target Oracle database. It can be used as a mechanism for incremental migrations and database version tracking.
 
 ## Script Structure ##
 Oracle scripts should be organised into one of four folders within the input folder:
@@ -20,7 +20,7 @@ Scripts which are used for `init` or `up` should be named using the following co
 <numerical version>_<description>[.<environment>].sql
 ```
 
-To minimise numbering conflicts when working within a team, it is recommended to use the current date and 24-hour time as your version number in the format of YYYYMMddHHmm, e.g. 201502242211.
+To minimise numbering conflicts when working within a team, it is recommended to use the current date and 24-hour time as your version number in the format of `YYYYMMddHHmm`, e.g. `201502242211`.
 
 ## down/term ##
 Roll-back scripts contained in the `down` folder are used when running omt in the down migration mode (using the `-d/--down` switch). They are run before any of the `term` scripts, and are executed in _reverse_ alphabetical order.
@@ -41,7 +41,7 @@ __Note__: If a target version is specified using the `-v/--version` argument, th
 ## Versioning ##
 _omt_ relies on a versions table to keep track of which scripts have been or should be executed to migrate a database. The versions table is intended to be created within the same schema/tablespace as the database being migrated (for ease of tracking), and has the following structure:
 
-```
+```PLSQL
 create table <schema>.versions
        (
            id NUMBER not null,
@@ -57,10 +57,26 @@ Version numbers are parsed from the beginning of the script file name (before th
 
 ## Per-Environment Scripts ##
 Scripts which should only be executed against particular environments are supported by added the environment name to the end of the script name, e.g. `script.prod.sql`, `script.qa.sql`.
-When executing _omt_, the environment can be specified through the `-e/--environment` argument. Only scripts which either do not specify an environment, or match the specified environment will be executed as part of the migration.
+When executing _omt_, the environment can be specified through the `-e/--environment` argument.
+
+Only scripts which either do not specify an environment, or match the specified environment will be executed as part of the migration.
 
 By default, the environment is set to `qa`.
 
+## Configuration ##
+_omt_ requires a single configuration setting — RunnerPath — which should be set to the path of _SQL*Plus_ on your machine. The installer for _SQL*Plus_ is made available by Oracle as part of their _Instant Client_ tools.
+
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <configSections>
+    <section name="sqlPlus" type="System.Configuration.NameValueSectionHandler" />
+  </configSections>
+  <sqlPlus>
+    <add key="RunnerPath" value="C:\oracle\client\product\11.2.0\client_1\sqlplus.exe" />
+  </sqlPlus>
+</configuration>
+```
 ## Usage ##
 
 ###Supported commands:###
@@ -117,3 +133,41 @@ By default, the environment is set to `qa`.
 						 executing scripts within SQL*Plus and continue execution
 						 of all the scripts.
 	--help               Display this help screen.
+
+## Examples ##
+### Migrating up to he latest version ###
+```
+omt.exe migrate -c (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=database.host)(PORT=49161))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=oracle))) -s sample -i ..\..\..\sample\ -u system -p password -y
+```
+### Migrating down to a specific version ###
+```
+omt.exe migrate -c (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=database.host)(PORT=49161))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=oracle))) -s sample -i ..\..\..\sample\ -u system -p password -d --version 201502251210 -y
+```
+
+## Troubleshooting ##
+### One of my scripts failed and now everything is ruined and down/term won't even run ###
+Try running _omt_ `down` migration using the `--force` switch. This will cause _omt_ to ignore any errors emitted from _SQL*Plus_ and attempt to execute all the scripts. If your termination scripts properly destroy all tablespaces and schemas, then this should bring you back to a blank state.
+
+### omt appears to hang when running a particular script ###
+Does your script contain any begin/end block statements? E.g.,
+
+```SQLPlus
+declare
+  -- some declares
+begin
+  -- do some things
+end;
+```
+
+_SQL*Plus_ requires that you terminate the execution of a block with a forward-slash (`/`). E.g.,
+
+``````SQLPlus
+declare
+  -- some declares
+begin
+  -- do some things
+end;
+/
+```
+
+If the slash is omitted, then _SQL*Plus_ sits there waiting for the statement to be terminated.
