@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using omt.Infrastructure;
 using omt.Migrations;
+using omt.Oracle;
 using omt.Scripts;
 
 namespace omt.Tests.Migrations
@@ -11,7 +12,7 @@ namespace omt.Tests.Migrations
     [TestFixture]
     public class UpMigrationTests
     {
-        public List<IScript> SomeScripts = new List<IScript> { new Script("foo", 1), new Script("bar", 2) };
+        public List<IScript> SomeScripts = new List<IScript> { new Script("foo", 1), new Script("bar", 2), new Script("baz", 3) };
 
         private Mock<IVersionRespository> _mockVersionRepository;
         private Mock<IScriptRunner> _mockScriptRunner;
@@ -42,6 +43,35 @@ namespace omt.Tests.Migrations
 
             _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[0].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
             _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[1].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[2].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public void if_a_migration_script_fails_then_the_following_migration_scripts_do_not_run()
+        {
+            var migration = new UpMigration(_mockVersionRepository.Object, force: false);
+
+            _mockScriptRunner.Setup(m => m.Execute(SomeScripts[1])).Throws(new SqlPlusException());
+
+            Ignore.Exception(() => migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.Value<string>(), Some.Value<string>()));
+
+            _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[0].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[1].AsDatabaseVersion(), It.IsAny<string>()), Times.Never);
+            _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[2].AsDatabaseVersion(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public void if_force_is_specified_then_the_migration_scripts_will_still_run()
+        {
+            var migration = new UpMigration(_mockVersionRepository.Object, force: true);
+
+            _mockScriptRunner.Setup(m => m.Execute(SomeScripts[1])).Throws(new SqlPlusException());
+
+            Ignore.Exception(() => migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.Value<string>(), Some.Value<string>()));
+
+            _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[0].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[1].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[2].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
         }
     }
 }
