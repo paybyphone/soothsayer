@@ -1,0 +1,2 @@
+CREATE TABLESPACE SAMPLE DATAFILE '/opt/oracle/soap/dbf/soa_sample_001.dbf' SIZE 100M AUTOEXTEND ON;
+CREATE TABLESPACE SAMPLE_IDX DATAFILE '/opt/oracle/soap/dbf/soa_sample_idx_001.dbf' SIZE 10M AUTOEXTEND ON;

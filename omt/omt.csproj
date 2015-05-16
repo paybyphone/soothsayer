@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C8276BBC-8E8C-4E06-B975-F902562DFC8D}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>omt</RootNamespace>
+    <AssemblyName>omt</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ColoredConsole">
+      <HintPath>..\packages\ColoredConsole.0.4.0\lib\net45\ColoredConsole.dll</HintPath>
+    </Reference>
+    <Reference Include="CommandLine">
+      <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
+    </Reference>
+    <Reference Include="LibZ.Bootstrap">
+      <HintPath>..\packages\LibZ.Bootstrap.1.1.0.2\lib\net40-client\LibZ.Bootstrap.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess">
+      <HintPath>..\packages\odp.net.managed.121.1.2\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="Dapper">
+      <HintPath>..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\DatabaseCommand.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\ListCommand.cs" />
+    <Compile Include="Commands\MigrateCommand.cs" />
+    <Compile Include="IDatabaseCommandOptions.cs" />
+    <Compile Include="Infrastructure\ConfigSection.cs" />
+    <Compile Include="Infrastructure\ISecureConsole.cs" />
+    <Compile Include="Oracle\Configuration\ISqlPlusConfiguration.cs" />
+    <Compile Include="Oracle\Configuration\Configuration.cs" />
+    <Compile Include="Infrastructure\MissingConfigurationSectionException.cs" />
+    <Compile Include="Infrastructure\MIssingConfigurationValueException.cs" />
+    <Compile Include="Infrastructure\PropertyName.cs" />
+    <Compile Include="IOptions.cs" />
+    <Compile Include="ListCommandOptions.cs" />
+    <Compile Include="DatabaseConnectionInfo.cs" />
+    <Compile Include="DatabaseVersion.cs" />
+    <Compile Include="Infrastructure\DefaultConsole.cs" />
+    <Compile Include="Infrastructure\IConsole.cs" />
+    <Compile Include="Infrastructure\IFilesystem.cs" />
+    <Compile Include="Infrastructure\IProcessRunner.cs" />
+    <Compile Include="Infrastructure\ObjectExtensions.cs" />
+    <Compile Include="Infrastructure\ProcessRunner.cs" />
+    <Compile Include="Infrastructure\ResharperCodeAnnotations.cs" />
+    <Compile Include="Migrations\DownMigration.cs" />
+    <Compile Include="IDatabaseMetadataProvider.cs" />
+    <Compile Include="IVersionRespository.cs" />
+    <Compile Include="IScriptRunner.cs" />
+    <Compile Include="Oracle\IConnectionFactory.cs" />
+    <Compile Include="Oracle\IVersionRespositoryFactory.cs" />
+    <Compile Include="Oracle\OracleMetadataProvider.cs" />
+    <Compile Include="Oracle\OracleVersionRespositoryFactory.cs" />
+    <Compile Include="Scanners\DownScriptScanner.cs" />
+    <Compile Include="Migrations\IMigration.cs" />
+    <Compile Include="IMigrator.cs" />
+    <Compile Include="Migrations\InitMigration.cs" />
+    <Compile Include="Scanners\FilePattern.cs" />
+    <Compile Include="Scanners\InitScriptScanner.cs" />
+    <Compile Include="Scripts\IScript.cs" />
+    <Compile Include="Scanners\IScriptScanner.cs" />
+    <Compile Include="Infrastructure\Output.cs" />
+    <Compile Include="MigrationDirection.cs" />
+    <Compile Include="MigrationInfo.cs" />
+    <Compile Include="MigrateCommandOptions.cs" />
+    <Compile Include="OracleMigrator.cs" />
+    <Compile Include="Oracle\OracleConnectionFactory.cs" />
+    <Compile Include="Oracle\OracleVersionRespository.cs" />
+    <Compile Include="Oracle\SqlPlusException.cs" />
+    <Compile Include="Oracle\SqlPlusScriptRunner.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Infrastructure\Prompt.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripts\Script.cs" />
+    <Compile Include="Infrastructure\SecureConsole.cs" />
+    <Compile Include="Migrations\TermMigration.cs" />
+    <Compile Include="Scanners\TermScriptScanner.cs" />
+    <Compile Include="Migrations\UpMigration.cs" />
+    <Compile Include="Scanners\UpScriptScanner.cs" />
+    <Compile Include="Infrastructure\CollectionExtensions.cs" />
+    <Compile Include="Infrastructure\RegularExpressionExtensions.cs" />
+    <Compile Include="Infrastructure\StringExtensions.cs" />
+    <Compile Include="Infrastructure\PathExtensions.cs" />
+    <Compile Include="Scripts\ScriptFolders.cs" />
+    <Compile Include="Scripts\SqlPlusScript.cs" />
+    <Compile Include="TinyIoC.cs" />
+    <Compile Include="Infrastructure\Slice.cs" />
+    <Compile Include="Infrastructure\SliceExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup />
+  <PropertyGroup>
+    <PostBuildEvent Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+      set LIBZ=$(SolutionDir)packages\LibZ.Bootstrap.1.1.0.2\tools\libz.exe
+      %25LIBZ%25 inject-dll --assembly omt.exe --include *.dll --move
+</PostBuildEvent>
+  </PropertyGroup>
+</Project>
