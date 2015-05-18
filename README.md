@@ -1,5 +1,7 @@
 # soothsayer - Overview #
 
+> __soothsayer__ (noun | so͞oth′sā′ər): one practising divination — including fortune-telling, haruspicy, and __providing Oracle wisdom__.
+
 _soothsayer_ is a command-line tool for applying a set of organised _SQL*Plus_ scripts to a target Oracle database. It can be used as a mechanism for incremental migrations and database version tracking.
 
 ## Script Structure ##
