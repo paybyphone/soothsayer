@@ -33,7 +33,7 @@ namespace soothsayer
 			HelpText = "The input folder containing both the roll-forward (up) and roll-back (down) sql scripts.")]
         public string InputFolder { get; set; }
 
-        [Option('e', "environment", Required = false, DefaultValue = "qa",
+        [Option('e', "environment", Required = false, DefaultValue = "dev",
           HelpText = "The environment of the target Oracle instance. This enables running of environment specific scripts.")]
         public string Environment { get; set; }
 
