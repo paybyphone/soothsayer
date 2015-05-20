@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using soothsayer.Infrastructure;
 using soothsayer.Scripts;
@@ -8,9 +7,16 @@ namespace soothsayer.Scanners
 {
     public class DownScriptScanner : IScriptScanner
     {
+        private readonly IFilesystem _filesystem;
+
+        public DownScriptScanner(IFilesystem filesystem)
+        {
+            _filesystem = filesystem;
+        }
+
         public IEnumerable<Script> Scan(string downScriptPath, string environment)
         {
-            var scriptFiles = Directory.GetFiles(downScriptPath, "*.sql")
+            var scriptFiles = _filesystem.GetFiles(downScriptPath, "*.sql")
                                        .OrderByDescending(s => s);
 
 			var filteredScriptFiles = scriptFiles.Where(s =>

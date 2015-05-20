@@ -65,6 +65,7 @@
     <Compile Include="Commands\MigrateCommand.cs" />
     <Compile Include="IDatabaseCommandOptions.cs" />
     <Compile Include="Infrastructure\ConfigSection.cs" />
+    <Compile Include="Infrastructure\Filesystem.cs" />
     <Compile Include="Infrastructure\ISecureConsole.cs" />
     <Compile Include="Oracle\Configuration\ISqlPlusConfiguration.cs" />
     <Compile Include="Infrastructure\MissingConfigurationSectionException.cs" />
@@ -94,6 +95,8 @@
     <Compile Include="Migrations\InitMigration.cs" />
     <Compile Include="Scanners\FilePattern.cs" />
     <Compile Include="Scanners\InitScriptScanner.cs" />
+    <Compile Include="Scanners\IScriptScannerFactory.cs" />
+    <Compile Include="Scanners\ScriptScannerFactory.cs" />
     <Compile Include="Scripts\IScript.cs" />
     <Compile Include="Scanners\IScriptScanner.cs" />
     <Compile Include="Infrastructure\Output.cs" />

@@ -12,10 +12,12 @@ namespace soothsayer
     public class OracleMigrator : IMigrator
     {
         private readonly IConnectionFactory _connectionFactory;
+        private readonly IScriptScannerFactory _scriptScannerFactory;
 
-        public OracleMigrator(IConnectionFactory connectionFactory)
+        public OracleMigrator(IConnectionFactory connectionFactory, IScriptScannerFactory scriptScannerFactory)
         {
             _connectionFactory = connectionFactory;
+            _scriptScannerFactory = scriptScannerFactory;
         }
 
         public void Migrate(DatabaseConnectionInfo databaseConnectionInfo, MigrationInfo migrationInfo)
@@ -34,10 +36,10 @@ namespace soothsayer
 
                 Output.Info("Scanning input folder '{0}' for scripts...".FormatWith(migrationInfo.ScriptFolder));
 
-                var initScripts = ScanForScripts(migrationInfo, ScriptFolders.Init, new InitScriptScanner()).ToArray();
-                var upScripts = ScanForScripts(migrationInfo, ScriptFolders.Up, new UpScriptScanner()).ToArray();
-                var downScripts = ScanForScripts(migrationInfo, ScriptFolders.Down, new DownScriptScanner()).ToArray();
-                var termScripts = ScanForScripts(migrationInfo, ScriptFolders.Term, new TermScriptScanner()).ToArray();
+                var initScripts = ScanForScripts(migrationInfo, ScriptFolders.Init, _scriptScannerFactory.Create(ScriptFolders.Init)).ToArray();
+                var upScripts = ScanForScripts(migrationInfo, ScriptFolders.Up, _scriptScannerFactory.Create(ScriptFolders.Up)).ToArray();
+                var downScripts = ScanForScripts(migrationInfo, ScriptFolders.Down, _scriptScannerFactory.Create(ScriptFolders.Down)).ToArray();
+                var termScripts = ScanForScripts(migrationInfo, ScriptFolders.Term, _scriptScannerFactory.Create(ScriptFolders.Term)).ToArray();
                 Output.EmptyLine();
 
                 if (migrationInfo.TargetVersion.HasValue)

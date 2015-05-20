@@ -56,6 +56,7 @@
     <Compile Include="Commands\DatabaseCommandTests.cs" />
     <Compile Include="Commands\MigrateCommandTests.cs" />
     <Compile Include="Commands\ListCommandTests.cs" />
+    <Compile Include="Scanners\ScriptScannerFactoryTests.cs" />
     <Compile Include="Some.cs" />
     <Compile Include="Migrations\TermMigrationTests.cs" />
     <Compile Include="Migrations\InitMigrationTests.cs" />

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace soothsayer.Infrastructure
 {
-    interface IFilesystem
+    public interface IFilesystem
     {
+        IEnumerable<string> GetFiles(string directoryPath, string filePattern);
     }
 }
