@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using soothsayer.Infrastructure;
 using soothsayer.Scripts;
@@ -28,13 +29,25 @@ namespace soothsayer.Scanners
 
         private long ParseRollbackVersion(string scriptFileName)
         {
+            if (!scriptFileName.StartsWith("RB_"))
+            {
+                throw new InvalidOperationException("scripts must have a rollback prefix 'RB_'");
+            }
+
             var scriptFileNameWithoutRollbackPrefix = scriptFileName.Substring(3);
+
             return ParseVersion(scriptFileNameWithoutRollbackPrefix);
         }
 
         private long ParseVersion(string scriptFileName)
         {
             var firstUnderscorePosition = scriptFileName.IndexOf('_');
+
+            if (firstUnderscorePosition < 0)
+            {
+                throw new InvalidOperationException("scripts must have a version, in the format of 'RB_<numerical version>_<description>[.<environment>].sql'");
+            }
+
             return long.Parse(scriptFileName.Substring(0, firstUnderscorePosition));
         }
     }

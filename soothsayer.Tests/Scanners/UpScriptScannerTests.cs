@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using soothsayer.Infrastructure;
@@ -34,6 +35,15 @@ namespace soothsayer.Tests.Scanners
             {
                 Assert.That(scriptFiles[i].Name, Is.EqualTo(expectedOrder[i]));
             }
+        }
+
+        [Test]
+        public void script_files_must_start_with_a_version()
+        {
+            MockFilesystem.Setup(m => m.GetFiles(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new[] { "noversion.sql" });
+
+            Assert.Throws<InvalidOperationException>(() => Scanner.Scan(Some.Value("folder"), Some.Value("environment")).Enumerate());
         }
 
         [Test]
