@@ -1,4 +1,5 @@
 ﻿using soothsayer.Infrastructure;
+using soothsayer.Infrastructure.Configuration;
 
 namespace soothsayer.Oracle.Configuration
 {

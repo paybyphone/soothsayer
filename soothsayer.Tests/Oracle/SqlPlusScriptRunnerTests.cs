@@ -1,6 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using soothsayer.Infrastructure;
+using soothsayer.Infrastructure.IO;
 using soothsayer.Oracle;
 using soothsayer.Scripts;
 

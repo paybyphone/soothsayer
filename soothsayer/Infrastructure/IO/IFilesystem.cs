@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace soothsayer.Infrastructure
+namespace soothsayer.Infrastructure.IO
 {
     public interface IFilesystem
     {

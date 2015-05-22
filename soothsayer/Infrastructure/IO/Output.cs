@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using ColoredConsole;
 
-namespace soothsayer.Infrastructure
+namespace soothsayer.Infrastructure.IO
 {
     public static class Output
     {

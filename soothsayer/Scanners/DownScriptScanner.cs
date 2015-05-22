@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using soothsayer.Infrastructure;
+using soothsayer.Infrastructure.IO;
 using soothsayer.Scripts;
 
 namespace soothsayer.Scanners

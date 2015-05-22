@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace soothsayer.Infrastructure
+namespace soothsayer.Infrastructure.IO
 {
     internal class SecureConsole : ISecureConsole
     {

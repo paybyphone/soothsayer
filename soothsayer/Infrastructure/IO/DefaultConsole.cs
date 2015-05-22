@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace soothsayer.Infrastructure
+namespace soothsayer.Infrastructure.IO
 {
     public class DefaultConsole : IConsole
     {

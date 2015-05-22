@@ -1,4 +1,4 @@
-﻿namespace soothsayer
+﻿namespace soothsayer.Commands
 {
     public interface IDatabaseCommandOptions : IOptions
     {

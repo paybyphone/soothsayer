@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace soothsayer.Infrastructure
+namespace soothsayer.Infrastructure.IO
 {
 	public static class PathExtensions
 	{

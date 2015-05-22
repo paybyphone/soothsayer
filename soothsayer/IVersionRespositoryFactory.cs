@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace soothsayer.Oracle
+namespace soothsayer
 {
     public interface IVersionRespositoryFactory
     {

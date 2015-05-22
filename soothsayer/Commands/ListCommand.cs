@@ -2,6 +2,7 @@
 using System.Reflection;
 using CommandLine;
 using soothsayer.Infrastructure;
+using soothsayer.Infrastructure.IO;
 using soothsayer.Oracle;
 
 namespace soothsayer.Commands

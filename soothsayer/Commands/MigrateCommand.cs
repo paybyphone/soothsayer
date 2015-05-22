@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using CommandLine;
 using soothsayer.Infrastructure;
+using soothsayer.Infrastructure.IO;
 
 namespace soothsayer.Commands
 {

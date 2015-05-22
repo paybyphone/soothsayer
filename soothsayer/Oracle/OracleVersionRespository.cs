@@ -4,6 +4,7 @@ using System.Linq;
 using Dapper;
 using soothsayer.Infrastructure;
 using Oracle.ManagedDataAccess.Client;
+using soothsayer.Infrastructure.IO;
 
 namespace soothsayer.Oracle
 {

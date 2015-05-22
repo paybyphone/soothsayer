@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace soothsayer.Infrastructure
+namespace soothsayer.Infrastructure.IO
 {
     public class Filesystem : IFilesystem
     {

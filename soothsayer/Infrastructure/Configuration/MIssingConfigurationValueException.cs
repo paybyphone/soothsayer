@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace soothsayer.Infrastructure
+namespace soothsayer.Infrastructure.Configuration
 {
     [Serializable]
     internal class MissingConfigurationValueException : Exception

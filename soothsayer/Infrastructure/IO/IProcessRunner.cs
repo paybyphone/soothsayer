@@ -1,4 +1,4 @@
-﻿namespace soothsayer.Infrastructure
+﻿namespace soothsayer.Infrastructure.IO
 {
     public interface IProcessRunner
     {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using soothsayer.Commands;
 using soothsayer.Infrastructure;
+using soothsayer.Infrastructure.IO;
 using TinyIoC;
 
 namespace soothsayer

@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.Configuration;
 
-namespace soothsayer.Infrastructure
+namespace soothsayer.Infrastructure.Configuration
 {
     public class ConfigSection
     {
