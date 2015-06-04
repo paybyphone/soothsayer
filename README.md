@@ -82,23 +82,23 @@ _soothsayer_ requires a single configuration setting — `RunnerPath` — which 
 ## Usage ##
 
 ###Supported commands:###
-	 
-	list                  Display a list of existing versions.
-	migrate               Run a database migration.
-  
+
+	list                 Display a list of existing versions.
+	migrate              Run a database migration.
+
 ###list###
 
-	-c, --connection    Required. The data source connection string for
-						connecting to the target Oracle instance.
-	-s, --schema        Required. The oracle schema in which the version tables
-						reside. Most likely the same schema as the tables being
-						migrated.
-	-u, --username      Required. The username to use to connect to target Oracle
-						instance.
-	-p, --password      The password for connecting to the target Oracle
-						instance. If not provided in the commandline then you
-						will be prompted to enter it in.
-	--help              Display this help screen.
+	-c, --connection     Required. The data source connection string for
+						 connecting to the target Oracle instance.
+	-s, --schema         Required. The oracle schema in which the version tables
+						 reside. Most likely the same schema as the tables being
+						 migrated.
+	-u, --username       Required. The username to use to connect to target Oracle
+						 instance.
+	-p, --password       The password for connecting to the target Oracle
+						 instance. If not provided in the commandline then you
+						 will be prompted to enter it in.
+	--help               Display this help screen.
 
 ###migrate###
 
@@ -137,13 +137,13 @@ _soothsayer_ requires a single configuration setting — `RunnerPath` — which 
 	--help               Display this help screen.
 
 ## Examples ##
-### Migrating up to he latest version ###
+### Migrating up to the latest version ###
 ```
-say.exe migrate -c (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=database.host)(PORT=49161))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=oracle))) -s sample -i ..\..\..\sample\ -u system -p password -y
+say.exe migrate -c (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=database.host)(PORT=49161))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=oracle))) -s sample -i ..\..\..\sample\ -e qa -u system -p password -y
 ```
 ### Migrating down to a specific version ###
 ```
-say.exe migrate -c (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=database.host)(PORT=49161))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=oracle))) -s sample -i ..\..\..\sample\ -u system -p password -d --version 201502251210 -y
+say.exe migrate -c (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=database.host)(PORT=49161))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=oracle))) -s sample -i ..\..\..\sample\ -e qa -u system -p password -d --version 201502251210 -y
 ```
 
 ## Troubleshooting ##
