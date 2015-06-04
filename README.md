@@ -139,11 +139,11 @@ _soothsayer_ requires a single configuration setting — `RunnerPath` — which 
 ## Examples ##
 ### Migrating up to he latest version ###
 ```
-sooth.exe migrate -c (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=database.host)(PORT=49161))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=oracle))) -s sample -i ..\..\..\sample\ -u system -p password -y
+say.exe migrate -c (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=database.host)(PORT=49161))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=oracle))) -s sample -i ..\..\..\sample\ -u system -p password -y
 ```
 ### Migrating down to a specific version ###
 ```
-sooth.exe migrate -c (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=database.host)(PORT=49161))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=oracle))) -s sample -i ..\..\..\sample\ -u system -p password -d --version 201502251210 -y
+say.exe migrate -c (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=database.host)(PORT=49161))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=oracle))) -s sample -i ..\..\..\sample\ -u system -p password -d --version 201502251210 -y
 ```
 
 ## Troubleshooting ##
