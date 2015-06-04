@@ -15,6 +15,11 @@ namespace soothsayer.Infrastructure
                 body = ubody.Operand as MemberExpression;
             }
 
+            if (body.IsNull())
+            {
+                throw new InvalidOperationException("Could not determine the Name for the given expression");
+            }
+
             return body.Member.Name;
         }
     }

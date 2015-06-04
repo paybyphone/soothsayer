@@ -24,7 +24,7 @@ namespace soothsayer
 			{
 				container.AutoRegister(DuplicateImplementationActions.RegisterMultiple);
 
-				var supportedCommands = container.ResolveAll<ICommand>();
+				var supportedCommands = container.ResolveAll<ICommand>().ToList();
 
 				if (!args.Any())
 				{
@@ -66,7 +66,7 @@ namespace soothsayer
 
 			foreach (var supportedCommand in supportedCommands)
 			{
-				Output.Text("  {0}\t\t\t{1}".FormatWith(supportedCommand.CommandText, supportedCommand.Description));
+				Output.Text("  {0}{1}".FormatWith(supportedCommand.CommandText.PadRight(24), supportedCommand.Description));
 			}
 
 			Output.EmptyLine();

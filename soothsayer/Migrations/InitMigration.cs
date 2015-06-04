@@ -34,7 +34,7 @@ namespace soothsayer.Migrations
             Output.EmptyLine();
 
             var initScriptsList = initScripts as IList<IScript> ?? initScripts.ToList();
-            if (initScriptsList.IsEmpty())
+            if (initScriptsList.IsNullOrEmpty())
             {
                 Output.Warn("No initialisation scripts found to create the database. Nothing will be done.");
             }

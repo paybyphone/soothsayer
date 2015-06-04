@@ -29,7 +29,7 @@ namespace soothsayer.Migrations
         private void TerminateDatabase(IEnumerable<IScript> termScripts, IScriptRunner scriptRunner, string schema)
         {
             var termScriptsList = termScripts as IList<IScript> ?? termScripts.ToList();
-            if (termScriptsList.IsEmpty())
+            if (termScriptsList.IsNullOrEmpty())
             {
                 Output.Warn("No termination scripts found to destroy the database. Nothing will be done.");
             }

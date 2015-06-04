@@ -23,7 +23,7 @@ namespace soothsayer.Migrations
             var applicableScripts = migrationScripts.Where(s => currentVersion.IsNull() || s.Version > currentVersion.Version)
                     .Where(s => !targetVersion.HasValue || s.Version <= targetVersion).ToArray();
 
-            if (applicableScripts.IsEmpty())
+            if (applicableScripts.IsNullOrEmpty())
             {
                 Output.Warn("No migration scripts need to be run. Nothing will be done.");
             }
