@@ -13,11 +13,16 @@ namespace soothsayer
     public class OracleMigrator : IMigrator
     {
         private readonly IConnectionFactory _connectionFactory;
+        private readonly IVersionRespositoryFactory _versionRespositoryFactory;
+        private readonly IDatabaseMetadataProviderFactory _databaseMetadataProviderFactory;
         private readonly IScriptScannerFactory _scriptScannerFactory;
 
-        public OracleMigrator(IConnectionFactory connectionFactory, IScriptScannerFactory scriptScannerFactory)
+        public OracleMigrator(IConnectionFactory connectionFactory, IVersionRespositoryFactory versionRespositoryFactory,
+            IDatabaseMetadataProviderFactory databaseMetadataProviderFactory, IScriptScannerFactory scriptScannerFactory)
         {
             _connectionFactory = connectionFactory;
+            _versionRespositoryFactory = versionRespositoryFactory;
+            _databaseMetadataProviderFactory = databaseMetadataProviderFactory;
             _scriptScannerFactory = scriptScannerFactory;
         }
 
@@ -29,8 +34,9 @@ namespace soothsayer
                 Output.EmptyLine();
 
                 Output.Text("Checking for the current database version.");
-                var oracleMetadataProvider = new OracleMetadataProvider(connection);
-                var oracleVersioning = new OracleVersionRespository(connection);
+                var oracleMetadataProvider = _databaseMetadataProviderFactory.Create(connection);
+                var oracleVersioning = _versionRespositoryFactory.Create(connection);
+
                 var currentVersion = oracleMetadataProvider.SchemaExists(migrationInfo.TargetSchema) ? oracleVersioning.GetCurrentVersion(migrationInfo.TargetSchema) : null;
                 Output.Info("The current database version is: {0}".FormatWith(currentVersion.IsNotNull() ? currentVersion.Version.ToString(CultureInfo.InvariantCulture) : "<empty>"));
                 Output.EmptyLine();
@@ -67,7 +73,7 @@ namespace soothsayer
 
         private static IEnumerable<Script> ScanForScripts(MigrationInfo migrationInfo, string migrationFolder, IScriptScanner scanner)
         {
-            var scripts = scanner.Scan(migrationInfo.ScriptFolder.Whack(migrationFolder), migrationInfo.TargetEnvironment).ToArray();
+            var scripts = (scanner.Scan(migrationInfo.ScriptFolder.Whack(migrationFolder), migrationInfo.TargetEnvironment) ?? Enumerable.Empty<Script>()).ToArray();
 
             Output.Text("Found the following '{0}' scripts:".FormatWith(migrationFolder));
 
@@ -97,7 +103,7 @@ namespace soothsayer
         }
 
         private static void RunMigration(MigrationInfo migrationInfo, DatabaseVersion currentVersion, IEnumerable<Script> initScripts, IEnumerable<Script> upScripts,
-            IEnumerable<Script> downScripts, IEnumerable<Script> termScripts, SqlPlusScriptRunner scriptRunner, OracleMetadataProvider databaseMetadataProvider, OracleVersionRespository versionRespository)
+            IEnumerable<Script> downScripts, IEnumerable<Script> termScripts, SqlPlusScriptRunner scriptRunner, IDatabaseMetadataProvider databaseMetadataProvider, IVersionRespository versionRespository)
         {
             if (migrationInfo.Direction == MigrationDirection.Down)
             {

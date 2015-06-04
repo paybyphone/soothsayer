@@ -27,7 +27,7 @@ namespace soothsayer.Tests.Infrastructure
         [Test]
         public void when_enumerable_contains_an_element_then_it_is_not_empty()
         {
-            var emptyCollection = new[] { Some.Value<string>() };
+            var emptyCollection = new[] { Some.String() };
 
             Assert.That(emptyCollection.IsNullOrEmpty(), Is.False);
         }

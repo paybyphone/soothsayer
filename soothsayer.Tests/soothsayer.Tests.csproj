@@ -58,6 +58,7 @@
     <Compile Include="Commands\ListCommandTests.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Infrastructure\CollectionExtensionsTests.cs" />
+    <Compile Include="OracleMigratorTests.cs" />
     <Compile Include="Oracle\OracleErrorsTests.cs" />
     <Compile Include="Scanners\DownScriptScannerTests.cs" />
     <Compile Include="Scanners\InitScriptScannerTests.cs" />

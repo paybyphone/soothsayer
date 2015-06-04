@@ -6,5 +6,10 @@
         {
             return value;
         }
+
+        public static string String(string value = @"")
+        {
+            return value;
+        }
     }
 }

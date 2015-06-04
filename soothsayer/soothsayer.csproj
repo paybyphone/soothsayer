@@ -64,9 +64,11 @@
     <Compile Include="Commands\ListCommand.cs" />
     <Compile Include="Commands\MigrateCommand.cs" />
     <Compile Include="Commands\IDatabaseCommandOptions.cs" />
+    <Compile Include="IDatabaseMetadataProviderFactory.cs" />
     <Compile Include="Infrastructure\Configuration\ConfigSection.cs" />
     <Compile Include="Infrastructure\IO\Filesystem.cs" />
     <Compile Include="Infrastructure\IO\ISecureConsole.cs" />
+    <Compile Include="OracleMetadataProviderFactory.cs" />
     <Compile Include="Oracle\Configuration\ISqlPlusConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\MissingConfigurationSectionException.cs" />
     <Compile Include="Infrastructure\Configuration\MIssingConfigurationValueException.cs" />

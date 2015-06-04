@@ -15,17 +15,13 @@ namespace soothsayer.Oracle
         private readonly ISqlPlusConfiguration _sqlPlusConfiguration;
 
         public SqlPlusScriptRunner(IProcessRunner processRunner, DatabaseConnectionInfo databaseConnectionInfo)
-            : this(databaseConnectionInfo.ConnectionString, databaseConnectionInfo.Username, databaseConnectionInfo.Password)
         {
             _processRunner = processRunner;
-            _sqlPlusConfiguration = new SqlPlusConfiguration();
-        }
+            _username = databaseConnectionInfo.Username;
+            _password = databaseConnectionInfo.Password;
+            _connectionString = databaseConnectionInfo.ConnectionString;
 
-        public SqlPlusScriptRunner(string connectionString, string username, string password)
-        {
-            _username = username;
-            _password = password;
-            _connectionString = connectionString;
+            _sqlPlusConfiguration = new SqlPlusConfiguration();
         }
 
         public void Execute(IScript script)

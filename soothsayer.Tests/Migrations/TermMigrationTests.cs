@@ -2,7 +2,6 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using soothsayer.Infrastructure;
 using soothsayer.Infrastructure.IO;
 using soothsayer.Migrations;
 using soothsayer.Scripts;
