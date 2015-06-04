@@ -66,6 +66,7 @@
     <Compile Include="OracleMigratorTests.cs" />
     <Compile Include="Oracle\OracleErrorsTests.cs" />
     <Compile Include="Scanners\DownScriptScannerTests.cs" />
+    <Compile Include="Scanners\FilePatternTests.cs" />
     <Compile Include="Scanners\InitScriptScannerTests.cs" />
     <Compile Include="Scanners\ScriptScannerFactoryTests.cs" />
     <Compile Include="Scanners\TermScriptScannerTests.cs" />

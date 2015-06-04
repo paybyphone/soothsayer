@@ -21,7 +21,7 @@ namespace soothsayer.Commands
         }
 
         public override string Description
-        { 
+        {
             get { return "Run a database migration."; }
         }
 
@@ -38,6 +38,12 @@ namespace soothsayer.Commands
                 if (migrateCommandOptions.NoPrompt)
                 {
                     Output.Info("Running in noprompt mode, soothsayer will run migrations without prompting for any confirmations.");
+                }
+
+                if (migrateCommandOptions.Concise)
+                {
+                    Output.Info("Running in concise mode");
+                    Output.Concise = true;
                 }
 
                 Output.Text("Migration scripts should be located in '{0}'.".FormatWith(migrateCommandOptions.InputFolder));

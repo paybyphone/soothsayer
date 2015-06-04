@@ -6,6 +6,7 @@ namespace soothsayer.Infrastructure.IO
     public static class Output
     {
         public static IColorConsole ConsoleProvider = new ColorConsoleAdapter();
+        public static bool Concise = false;
 
         public static void Text(string message)
         {
@@ -15,6 +16,14 @@ namespace soothsayer.Infrastructure.IO
         public static void Text(string message, int indent)
         {
             ConsoleProvider.WriteLine((Spaces(indent) + message).DarkGray());
+        }
+
+        public static void Verbose(string message)
+        {
+            if (!Concise)
+            {
+                ConsoleProvider.WriteLine(message);
+            }
         }
 
         public static void Info(string message)

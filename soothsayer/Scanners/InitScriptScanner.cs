@@ -1,5 +1,4 @@
-﻿using soothsayer.Infrastructure;
-using soothsayer.Infrastructure.IO;
+﻿using soothsayer.Infrastructure.IO;
 
 namespace soothsayer.Scanners
 {

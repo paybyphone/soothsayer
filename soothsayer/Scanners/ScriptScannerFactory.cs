@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using soothsayer.Infrastructure;
 using soothsayer.Infrastructure.IO;
 using soothsayer.Scripts;
 

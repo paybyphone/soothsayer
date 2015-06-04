@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace soothsayer.Infrastructure.IO
 {
@@ -25,7 +24,7 @@ namespace soothsayer.Infrastructure.IO
 
         private void ShowSqlPlusProcessOutput(object sender, DataReceivedEventArgs e)
         {
-            Console.WriteLine(e.Data);
+            Output.Verbose(e.Data);
         }
     }
 }

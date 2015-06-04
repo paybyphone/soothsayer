@@ -45,6 +45,10 @@ namespace soothsayer.Commands
             HelpText = "The target database version to migrate up (or down) to. Migration will stop if the next script will bring the database to a higher version than specified here (or lower in the case of roll-backs).")]
         public bool NoPrompt { get; set; }
 
+        [Option("concise", Required = false,
+            HelpText = "Suppresses verbose information (such as SqlPlus output)")]
+        public bool Concise { get; set; }
+
         [Option("force", Required = false, DefaultValue = false,
             HelpText = "Tells soothsayer to ignore any errors from executing scripts within SQL*Plus and continue execution of all the scripts.")]
         public bool Force { get; set; }
