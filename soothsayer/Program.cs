@@ -24,7 +24,9 @@ namespace soothsayer
 			{
 				container.AutoRegister(DuplicateImplementationActions.RegisterMultiple);
 
-				var supportedCommands = container.ResolveAll<ICommand>().ToList();
+                var supportedCommands = container.ResolveAll<ICommand>()
+                                                 .DistinctBy(c =>  c.CommandText)
+                                                 .ToList();
 
 				if (!args.Any())
 				{
