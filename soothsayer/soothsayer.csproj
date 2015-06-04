@@ -66,8 +66,11 @@
     <Compile Include="Commands\IDatabaseCommandOptions.cs" />
     <Compile Include="IDatabaseMetadataProviderFactory.cs" />
     <Compile Include="Infrastructure\Configuration\ConfigSection.cs" />
+    <Compile Include="Infrastructure\IO\ColorConsoleAdapter.cs" />
     <Compile Include="Infrastructure\IO\Filesystem.cs" />
+    <Compile Include="Infrastructure\IO\IColorConsole.cs" />
     <Compile Include="Infrastructure\IO\ISecureConsole.cs" />
+    <Compile Include="IScriptRunnerFactory.cs" />
     <Compile Include="OracleMetadataProviderFactory.cs" />
     <Compile Include="Oracle\Configuration\ISqlPlusConfiguration.cs" />
     <Compile Include="Infrastructure\Configuration\MissingConfigurationSectionException.cs" />
@@ -125,6 +128,7 @@
     <Compile Include="Infrastructure\IO\PathExtensions.cs" />
     <Compile Include="Scripts\ScriptFolders.cs" />
     <Compile Include="Scripts\SqlPlusScript.cs" />
+    <Compile Include="SqlPlusScriptRunnerFactory.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="Infrastructure\Slice.cs" />
     <Compile Include="Infrastructure\SliceExtensions.cs" />

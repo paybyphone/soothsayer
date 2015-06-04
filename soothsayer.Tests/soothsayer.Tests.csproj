@@ -34,6 +34,10 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ColoredConsole, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ColoredConsole.0.4.0\lib\net45\ColoredConsole.dll</HintPath>
+    </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
     </Reference>
@@ -58,6 +62,7 @@
     <Compile Include="Commands\ListCommandTests.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Infrastructure\CollectionExtensionsTests.cs" />
+    <Compile Include="MockScriptScannerFactory.cs" />
     <Compile Include="OracleMigratorTests.cs" />
     <Compile Include="Oracle\OracleErrorsTests.cs" />
     <Compile Include="Scanners\DownScriptScannerTests.cs" />

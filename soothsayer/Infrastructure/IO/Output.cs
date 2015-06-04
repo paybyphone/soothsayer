@@ -5,6 +5,8 @@ namespace soothsayer.Infrastructure.IO
 {
     public static class Output
     {
+        public static IColorConsole ConsoleProvider = new ColorConsoleAdapter();
+
         public static void Text(string message)
         {
             Text(message, 0);
@@ -12,7 +14,7 @@ namespace soothsayer.Infrastructure.IO
 
         public static void Text(string message, int indent)
         {
-            ColorConsole.WriteLine((Spaces(indent) + message).DarkGray());
+            ConsoleProvider.WriteLine((Spaces(indent) + message).DarkGray());
         }
 
         public static void Info(string message)
@@ -22,12 +24,12 @@ namespace soothsayer.Infrastructure.IO
 
         public static void Info(string message, int indent)
         {
-            ColorConsole.WriteLine((Spaces(indent) + message).Green());
+            ConsoleProvider.WriteLine((Spaces(indent) + message).Green());
         }
 
         public static void Error(string message)
         {
-            ColorConsole.WriteLine(message.Red());
+            ConsoleProvider.WriteLine(message.Red());
         }
 
         public static void Warn(string message)
@@ -37,12 +39,12 @@ namespace soothsayer.Infrastructure.IO
 
         public static void Warn(string message, int indent)
         {
-            ColorConsole.WriteLine((Spaces(indent) + message).Yellow());
+            ConsoleProvider.WriteLine((Spaces(indent) + message).Yellow());
         }
 
         public static void EmptyLine()
         {
-            ColorConsole.WriteLine();
+            ConsoleProvider.WriteLine();
         }
 
         internal static string Spaces(int indent)

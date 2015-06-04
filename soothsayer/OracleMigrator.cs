@@ -4,7 +4,6 @@ using System.Linq;
 using soothsayer.Infrastructure;
 using soothsayer.Infrastructure.IO;
 using soothsayer.Migrations;
-using soothsayer.Oracle;
 using soothsayer.Scanners;
 using soothsayer.Scripts;
 
@@ -16,14 +15,17 @@ namespace soothsayer
         private readonly IVersionRespositoryFactory _versionRespositoryFactory;
         private readonly IDatabaseMetadataProviderFactory _databaseMetadataProviderFactory;
         private readonly IScriptScannerFactory _scriptScannerFactory;
+        private readonly IScriptRunnerFactory _scriptRunnerFactory;
 
         public OracleMigrator(IConnectionFactory connectionFactory, IVersionRespositoryFactory versionRespositoryFactory,
-            IDatabaseMetadataProviderFactory databaseMetadataProviderFactory, IScriptScannerFactory scriptScannerFactory)
+            IDatabaseMetadataProviderFactory databaseMetadataProviderFactory, IScriptScannerFactory scriptScannerFactory,
+            IScriptRunnerFactory scriptRunnerFactory)
         {
             _connectionFactory = connectionFactory;
             _versionRespositoryFactory = versionRespositoryFactory;
             _databaseMetadataProviderFactory = databaseMetadataProviderFactory;
             _scriptScannerFactory = scriptScannerFactory;
+            _scriptRunnerFactory = scriptRunnerFactory;
         }
 
         public void Migrate(DatabaseConnectionInfo databaseConnectionInfo, MigrationInfo migrationInfo)
@@ -56,7 +58,7 @@ namespace soothsayer
 
                 VerifyDownScripts(upScripts, downScripts);
 
-                var scriptRunner = new SqlPlusScriptRunner(new ProcessRunner(), databaseConnectionInfo);
+                var scriptRunner = _scriptRunnerFactory.Create(databaseConnectionInfo);
                 RunMigration(migrationInfo, currentVersion, initScripts, upScripts, downScripts, termScripts, scriptRunner, oracleMetadataProvider, oracleVersioning);
 
                 if (oracleMetadataProvider.SchemaExists(migrationInfo.TargetSchema))
@@ -103,7 +105,7 @@ namespace soothsayer
         }
 
         private static void RunMigration(MigrationInfo migrationInfo, DatabaseVersion currentVersion, IEnumerable<Script> initScripts, IEnumerable<Script> upScripts,
-            IEnumerable<Script> downScripts, IEnumerable<Script> termScripts, SqlPlusScriptRunner scriptRunner, IDatabaseMetadataProvider databaseMetadataProvider, IVersionRespository versionRespository)
+            IEnumerable<Script> downScripts, IEnumerable<Script> termScripts, IScriptRunner scriptRunner, IDatabaseMetadataProvider databaseMetadataProvider, IVersionRespository versionRespository)
         {
             if (migrationInfo.Direction == MigrationDirection.Down)
             {
