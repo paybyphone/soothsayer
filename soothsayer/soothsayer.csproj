@@ -70,6 +70,8 @@
     <Compile Include="Infrastructure\IO\Filesystem.cs" />
     <Compile Include="Infrastructure\IO\IColorConsole.cs" />
     <Compile Include="Infrastructure\IO\ISecureConsole.cs" />
+    <Compile Include="Infrastructure\IO\Win32ErrorCode.cs" />
+    <Compile Include="Infrastructure\IO\Win32ExceptionExtensions.cs" />
     <Compile Include="IScriptRunnerFactory.cs" />
     <Compile Include="OracleMetadataProviderFactory.cs" />
     <Compile Include="Oracle\Configuration\ISqlPlusConfiguration.cs" />
