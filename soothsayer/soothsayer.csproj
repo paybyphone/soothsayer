@@ -152,7 +152,11 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="sqlplus.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       set LIBZ=$(SolutionDir)packages\LibZ.Bootstrap.1.1.0.2\tools\libz.exe
