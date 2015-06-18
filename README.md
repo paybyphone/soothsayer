@@ -191,4 +191,4 @@ If the slash is omitted, then _SQL*Plus_ sits there waiting for the statement to
 
 soothsayer is made available as-is under the _Apache License, Version 2.0_. See the LICENSE file for full license details.
 
-Oracle sqlplus.exe, which is bundled with soothsayer, is made available by Oracle under the _Oracle Technology Network Development and Distribution License Terms for Instance Client_ (http://www.oracle.com/technetwork/licenses/instant-client-lic-152016.html).
+Oracle sqlplus.exe, which is bundled with soothsayer, is made available by Oracle under the _Oracle Technology Network Development and Distribution License Terms for Instant Client_ (http://www.oracle.com/technetwork/licenses/instant-client-lic-152016.html).
