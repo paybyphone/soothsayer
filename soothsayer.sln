@@ -11,6 +11,34 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "soothsayer.Tests", "soothsayer.Tests\soothsayer.Tests.csproj", "{5C21758C-96C8-4F37-BD0A-A8ADD8717E49}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{31848B68-1EB8-4681-A074-45ADF2CE5D61}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "up", "up", "{90D339BA-FCD9-42D2-A429-A4E80F1D9246}"
+	ProjectSection(SolutionItems) = preProject
+		sample\up\201502251210_DDL_CreateSampleTable.sql = sample\up\201502251210_DDL_CreateSampleTable.sql
+		sample\up\201502251212_DML_InsertSampleData.qa.sql = sample\up\201502251212_DML_InsertSampleData.qa.sql
+		sample\up\201502251213_DML_UpdateSampleTable.sql = sample\up\201502251213_DML_UpdateSampleTable.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "init", "init", "{B8FCC40D-10F1-4491-88D7-DBCB08E1A9E1}"
+	ProjectSection(SolutionItems) = preProject
+		sample\init\201502251206_DDL_CreateTablespace.qa.sql = sample\init\201502251206_DDL_CreateTablespace.qa.sql
+		sample\init\201502251207_DDL_CreateSchema.sql = sample\init\201502251207_DDL_CreateSchema.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "down", "down", "{FF874192-92CB-4150-A661-E41B8E2B3003}"
+	ProjectSection(SolutionItems) = preProject
+		sample\down\RB_201502251210_DDL_CreateSampleTable.sql = sample\down\RB_201502251210_DDL_CreateSampleTable.sql
+		sample\down\RB_201502251212_DML_InsertSampleData.qa.sql = sample\down\RB_201502251212_DML_InsertSampleData.qa.sql
+		sample\down\RB_201502251213_DML_UpdateSampleTable.sql = sample\down\RB_201502251213_DML_UpdateSampleTable.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "term", "term", "{471C6D50-0966-4545-B04C-7B4A3F1FE109}"
+	ProjectSection(SolutionItems) = preProject
+		sample\term\RB_201502251206_DDL_CreateTablespace.qa.sql = sample\term\RB_201502251206_DDL_CreateTablespace.qa.sql
+		sample\term\RB_201502251207_DDL_CreateSchema.sql = sample\term\RB_201502251207_DDL_CreateSchema.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +56,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{31848B68-1EB8-4681-A074-45ADF2CE5D61} = {FF6BA93D-D2BC-45F9-A748-70255D54DA8C}
+		{90D339BA-FCD9-42D2-A429-A4E80F1D9246} = {31848B68-1EB8-4681-A074-45ADF2CE5D61}
+		{B8FCC40D-10F1-4491-88D7-DBCB08E1A9E1} = {31848B68-1EB8-4681-A074-45ADF2CE5D61}
+		{FF874192-92CB-4150-A661-E41B8E2B3003} = {31848B68-1EB8-4681-A074-45ADF2CE5D61}
+		{471C6D50-0966-4545-B04C-7B4A3F1FE109} = {31848B68-1EB8-4681-A074-45ADF2CE5D61}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 
 namespace soothsayer.Infrastructure.IO
 {
@@ -12,7 +13,21 @@ namespace soothsayer.Infrastructure.IO
 
             var process = new Process { StartInfo = sqlPlusProcessInfo };
             process.OutputDataReceived += ShowSqlPlusProcessOutput;
-            process.Start();
+
+            try
+            {
+                process.Start();
+            }
+            catch (Win32Exception executionException)
+            {
+                if (executionException.IsFor(Win32ErrorCode.FileNotFound))
+                {
+                    Output.Error("Could not find executable '{0}' to run".FormatWith(processFullPath));
+                }
+
+                throw;
+            }
+
             process.BeginOutputReadLine();
 
             process.WaitForExit();

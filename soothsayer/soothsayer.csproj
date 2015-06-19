@@ -70,6 +70,8 @@
     <Compile Include="Infrastructure\IO\Filesystem.cs" />
     <Compile Include="Infrastructure\IO\IColorConsole.cs" />
     <Compile Include="Infrastructure\IO\ISecureConsole.cs" />
+    <Compile Include="Infrastructure\IO\Win32ErrorCode.cs" />
+    <Compile Include="Infrastructure\IO\Win32ExceptionExtensions.cs" />
     <Compile Include="IScriptRunnerFactory.cs" />
     <Compile Include="OracleMetadataProviderFactory.cs" />
     <Compile Include="Oracle\Configuration\ISqlPlusConfiguration.cs" />
@@ -150,7 +152,11 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="sqlplus.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       set LIBZ=$(SolutionDir)packages\LibZ.Bootstrap.1.1.0.2\tools\libz.exe
