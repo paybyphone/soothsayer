@@ -127,6 +127,8 @@ namespace soothsayer
                 var initMigration = new InitMigration(databaseMetadataProvider, versionRespository, migrationInfo.Forced);
                 initMigration.Migrate(initScripts, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
 
+                versionRespository.InitialiseVersioningTable(migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
+
                 var upMigration = new UpMigration(versionRespository, migrationInfo.Forced);
                 upMigration.Migrate(upScripts, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
             }

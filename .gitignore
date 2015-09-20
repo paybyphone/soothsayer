@@ -10,5 +10,7 @@
 *.userprefs
 *.nupkg
 *.orig
+*.ncrunchsolution
+*.ncrunchproject
 
 packages/*

@@ -124,6 +124,8 @@ namespace soothsayer.Oracle
 
         public void InitialiseVersioningTable(string schema, string tablespace = null)
         {
+            Output.Info("Creating the versioning table within the schema '{0}'".FormatWith(schema));
+
             const string versionsTableSql = @"create table {0}.versions 
                                                     (
                                                       id NUMBER not null,
@@ -145,12 +147,14 @@ namespace soothsayer.Oracle
                                                         maxextents unlimited
                                                       )";
             const string versionsTableSequenceSql = @"create sequence {0}.versions_seq 
-	                                                    start with 1 
-	                                                    increment by 1 
-	                                                    nomaxvalue";
+                                                        start with 1 
+                                                        increment by 1 
+                                                        nomaxvalue";
 
             _connection.Execute(versionsTableSql.FormatWith(schema, tablespace ?? schema));
             _connection.Execute(versionsTableSequenceSql.FormatWith(schema));
+
+            Output.Info("Versioning table '{0}.versions' created".FormatWith(schema));
         }
     }
 }

@@ -68,9 +68,7 @@ namespace soothsayer.Migrations
                     Output.Info("Script '{0}' completed.".FormatWith(script.Name));
                 }
 
-                Output.Info("Initialisation scripts completed. Creating the versioning table within the schema '{0}'".FormatWith(schema));
-                _versionRespository.InitialiseVersioningTable(schema, tablespace);
-                Output.Info("Versioning table '{0}.versions' created".FormatWith(schema));
+                Output.Info("Initialisation scripts completed.");
             }
 
             Output.EmptyLine();
