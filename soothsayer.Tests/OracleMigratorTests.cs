@@ -79,7 +79,7 @@ namespace soothsayer.Tests
         }
 
         [Test]
-        public void version_repository_is_initialised_when_running_an_up_migration()
+        public void ensure_version_repository_is_initialised_when_running_an_up_migration()
         {
             var databaseConnectionInfo = SomeConnectionInfo();
 
@@ -88,7 +88,7 @@ namespace soothsayer.Tests
 
             _migrator.Migrate(databaseConnectionInfo, migrationInfo);
             
-            _mockVersionRepository.Verify(m => m.InitialiseVersioningTable("testSchema", "testTablespace"));
+            _mockVersionRepository.Verify(m => m.EnsureVersioningTableIsInitialised("testSchema", "testTablespace"));
         }
 
         private DatabaseConnectionInfo SomeConnectionInfo()

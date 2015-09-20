@@ -10,5 +10,6 @@ namespace soothsayer
         void InsertVersion(DatabaseVersion version, string schema);
         void RemoveVersion(DatabaseVersion version, string schema);
         void InitialiseVersioningTable(string schema, string tablespace = null);
+        void EnsureVersioningTableIsInitialised(string schema, string tablespace = null);
     }
 }

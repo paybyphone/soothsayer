@@ -122,6 +122,14 @@ namespace soothsayer.Oracle
             }
         }
 
+        public void EnsureVersioningTableIsInitialised(string schema, string tablespace = null)
+        {
+            bool alreadyInitialised = GetCurrentVersion(schema) != null;
+
+            if ( !alreadyInitialised )
+                InitialiseVersioningTable(schema, tablespace);
+        }       
+
         public void InitialiseVersioningTable(string schema, string tablespace = null)
         {
             Output.Info("Creating the versioning table within the schema '{0}'".FormatWith(schema));
