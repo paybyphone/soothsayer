@@ -124,11 +124,21 @@ namespace soothsayer.Oracle
 
         public void EnsureVersioningTableIsInitialised(string schema, string tablespace = null)
         {
-            bool alreadyInitialised = GetCurrentVersion(schema) != null;
+            bool alreadyInitialised = VersionTableExists(schema);
 
             if ( !alreadyInitialised )
                 InitialiseVersioningTable(schema, tablespace);
-        }       
+        }
+
+        public bool VersionTableExists(string schema)
+        {
+            string sql =
+                @"select count(*) from all_tables where owner='{0}' and table_name='VERSIONS'".FormatWith(
+                    schema.ToUpper());
+
+            var count = _connection.Query<int>(sql).Single();
+            return count == 1;
+        }
 
         public void InitialiseVersioningTable(string schema, string tablespace = null)
         {
