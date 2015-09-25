@@ -20,6 +20,7 @@ namespace soothsayer.Tests
         private Mock<IScriptRunner> _mockScriptRunner;
         private Mock<IScriptRunnerFactory> _mockScriptRunnerFactory;
         private Mock<IColorConsole> _mockOutput;
+        private OracleMigrator _migrator;
 
         [SetUp]
         public void SetUp()
@@ -43,17 +44,14 @@ namespace soothsayer.Tests
             _mockScriptRunner = new Mock<IScriptRunner>();
             _mockScriptRunnerFactory = new Mock<IScriptRunnerFactory>();
             _mockScriptRunnerFactory.Setup(m => m.Create(It.IsAny<DatabaseConnectionInfo>())).Returns(_mockScriptRunner.Object);
+
+            _migrator = new OracleMigrator(_mockConnectionFactory.Object, _mockVersionRepositoryFactory.Object, _mockDatabaseMetadataProviderFactory.Object, _mockScriptScannerFactory, _mockScriptRunnerFactory.Object);
         }
 
         [Test]
         public void all_supported_script_folders_are_scanned()
         {
-            var migrator = new OracleMigrator(_mockConnectionFactory.Object, _mockVersionRepositoryFactory.Object, _mockDatabaseMetadataProviderFactory.Object, _mockScriptScannerFactory, _mockScriptRunnerFactory.Object);
-
-            DatabaseConnectionInfo databaseConnectionInfo = new DatabaseConnectionInfo(Some.String(), Some.String(), Some.String());
-            MigrationInfo migrationInfo = new MigrationInfo(Some.Value<MigrationDirection>(), Some.String(), Some.String(), Some.String(), Some.String(), null);
-
-            migrator.Migrate(databaseConnectionInfo, migrationInfo);
+            _migrator.Migrate(Some.ConnectionInfo(), Some.MigrationInfo());
 
             foreach (var mockScriptScanner in _mockScriptScannerFactory.GetMocks())
             {
@@ -64,18 +62,24 @@ namespace soothsayer.Tests
         [Test]
         public void when_an_up_script_is_missing_a_corresponding_down_script_then_a_warning_is_displayed()
         {
-            var migrator = new OracleMigrator(_mockConnectionFactory.Object, _mockVersionRepositoryFactory.Object, _mockDatabaseMetadataProviderFactory.Object, _mockScriptScannerFactory, _mockScriptRunnerFactory.Object);
-
-            DatabaseConnectionInfo databaseConnectionInfo = new DatabaseConnectionInfo(Some.String(), Some.String(), Some.String());
-            MigrationInfo migrationInfo = new MigrationInfo(Some.Value<MigrationDirection>(), Some.String(), Some.String(), Some.String(), Some.String(), null);
-
             const string upScriptPath = "20150406_scriptpath";
             _mockScriptScannerFactory.GetMock(ScriptFolders.Up).Setup(m => m.Scan(It.IsAny<string>(), It.IsAny<string>())).Returns(new[] { new Script(upScriptPath, 1) });
 
-            migrator.Migrate(databaseConnectionInfo, migrationInfo);
+            _migrator.Migrate(Some.ConnectionInfo(), Some.MigrationInfo());
 
             _mockOutput.Verify(m => m.WriteLine("The following 'up' scripts do not have a corresponding 'down' script, any rollback may not work as expected:".Yellow()));
             _mockOutput.Verify(m => m.WriteLine("    {0}".FormatWith(upScriptPath).DarkGray()), Times.Once());
+        }
+
+        [Test]
+        public void ensure_version_repository_is_initialised_when_running_an_up_migration()
+        {
+            var migrationInfo = new MigrationInfo(direction: MigrationDirection.Up, scriptFolder: Some.String(), targetSchema: "testSchema",
+                targetTablespace: "testTablespace", targetEnvironment: Some.String(), targetVersion: null);
+
+            _migrator.Migrate(Some.ConnectionInfo(), migrationInfo);
+
+            _mockVersionRepository.Verify(m => m.InitialiseVersioningTable("testSchema", "testTablespace"));
         }
     }
 }

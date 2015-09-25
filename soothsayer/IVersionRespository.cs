@@ -9,6 +9,7 @@ namespace soothsayer
         bool ContainsVersion(DatabaseVersion version, string schema);
         void InsertVersion(DatabaseVersion version, string schema);
         void RemoveVersion(DatabaseVersion version, string schema);
+        bool VersionTableExists(string schema);
         void InitialiseVersioningTable(string schema, string tablespace = null);
     }
 }
