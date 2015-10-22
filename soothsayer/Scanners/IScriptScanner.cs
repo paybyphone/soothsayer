@@ -5,6 +5,6 @@ namespace soothsayer.Scanners
 {
     public interface IScriptScanner
     {
-        IEnumerable<Script> Scan(string scriptPath, string environment);
+        IEnumerable<Script> Scan(string scriptPath, params string[] environment);
     }
 }
