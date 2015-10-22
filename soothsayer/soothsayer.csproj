@@ -60,7 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\DatabaseCommand.cs" />
-    <Compile Include="Commands\DevEnvironment.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ListCommand.cs" />
     <Compile Include="Commands\MigrateCommand.cs" />
