@@ -64,11 +64,14 @@
     <Reference Include="System.Data.OracleClient" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAppliedScriptRespositoryFactory.cs" />
+    <Compile Include="Oracle\OracleAppliedScriptsRepository.cs" />
     <Compile Include="Commands\DatabaseCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ListCommand.cs" />
     <Compile Include="Commands\MigrateCommand.cs" />
     <Compile Include="Commands\IDatabaseCommandOptions.cs" />
+    <Compile Include="IAppliedScriptsRepository.cs" />
     <Compile Include="IDatabaseMetadataProviderFactory.cs" />
     <Compile Include="Infrastructure\Configuration\ConfigSection.cs" />
     <Compile Include="Infrastructure\IO\ColorConsoleAdapter.cs" />
@@ -99,6 +102,7 @@
     <Compile Include="IScriptRunner.cs" />
     <Compile Include="IConnectionFactory.cs" />
     <Compile Include="IVersionRespositoryFactory.cs" />
+    <Compile Include="Oracle\OracleAppliedScriptsRepositoryFactory.cs" />
     <Compile Include="Oracle\OracleMetadataProvider.cs" />
     <Compile Include="Oracle\OracleVersionRespositoryFactory.cs" />
     <Compile Include="Scanners\DownScriptScanner.cs" />
@@ -134,6 +138,7 @@
     <Compile Include="Infrastructure\StringExtensions.cs" />
     <Compile Include="Infrastructure\IO\PathExtensions.cs" />
     <Compile Include="Scripts\ScriptFolders.cs" />
+    <Compile Include="Scripts\ScriptReader.cs" />
     <Compile Include="Scripts\SqlPlusScript.cs" />
     <Compile Include="SqlPlusScriptRunnerFactory.cs" />
     <Compile Include="TinyIoC.cs" />

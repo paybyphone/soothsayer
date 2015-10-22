@@ -17,8 +17,11 @@ namespace soothsayer
         private readonly IScriptScannerFactory _scriptScannerFactory;
         private readonly IScriptRunnerFactory _scriptRunnerFactory;
 
-        public OracleMigrator(IConnectionFactory connectionFactory, IVersionRespositoryFactory versionRespositoryFactory,
-            IDatabaseMetadataProviderFactory databaseMetadataProviderFactory, IScriptScannerFactory scriptScannerFactory,
+        public OracleMigrator(
+            IConnectionFactory connectionFactory,
+            IVersionRespositoryFactory versionRespositoryFactory,
+            IDatabaseMetadataProviderFactory databaseMetadataProviderFactory,
+            IScriptScannerFactory scriptScannerFactory,
             IScriptRunnerFactory scriptRunnerFactory)
         {
             _connectionFactory = connectionFactory;

@@ -158,8 +158,8 @@ namespace soothsayer.Oracle
                                                         maxextents unlimited
                                                       )";
             const string versionsTableSequenceSql = @"create sequence {0}.versions_seq
-                                                        start with 1
-                                                        increment by 1
+	                                                    start with 1 
+	                                                    increment by 1 
                                                         nomaxvalue";
 
             _connection.Execute(versionsTableSql.FormatWith(schema, tablespace ?? schema));
