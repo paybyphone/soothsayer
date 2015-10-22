@@ -4,7 +4,6 @@ using CommandLine;
 using Moq;
 using NUnit.Framework;
 using soothsayer.Commands;
-using soothsayer.Infrastructure;
 using soothsayer.Infrastructure.IO;
 
 namespace soothsayer.Tests.Commands

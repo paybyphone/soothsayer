@@ -34,7 +34,7 @@ namespace soothsayer.Commands
 			HelpText = "The input folder containing both the roll-forward (up) and roll-back (down) sql scripts.")]
         public string InputFolder { get; set; }
 
-        [OptionList('e', "environment", Required = false, DefaultValue = new[] { "dev" }, Separator = ',',
+        [OptionList('e', "environment", Required = false, Separator = ',',
           HelpText = "The environment of the target Oracle instance. This enables running of environment specific scripts. More than one environment can be specified, separated by a comma.")]
         public IList<string> Environment { get; set; }
 
