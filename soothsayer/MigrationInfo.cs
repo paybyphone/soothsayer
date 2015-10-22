@@ -1,8 +1,10 @@
-﻿namespace soothsayer
+﻿using System.Collections.Generic;
+
+namespace soothsayer
 {
     public class MigrationInfo
     {
-        public MigrationInfo(MigrationDirection direction, string scriptFolder, string targetSchema, string targetTablespace, string targetEnvironment,
+        public MigrationInfo(MigrationDirection direction, string scriptFolder, string targetSchema, string targetTablespace, IList<string> targetEnvironment,
             long? targetVersion, bool forced = false)
         {
             Direction = direction;
@@ -19,7 +21,7 @@
 
         public string TargetSchema { get; private set; }
         public string TargetTablespace { get; private set; }
-        public string TargetEnvironment { get; private set; }
+        public IList<string> TargetEnvironment { get; private set; }
         public long? TargetVersion { get; private set; }
 
         public bool Forced { get; private set; }

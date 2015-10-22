@@ -9,7 +9,7 @@
 
         public static MigrationInfo MigrationInfo()
         {
-            return new MigrationInfo(Value<MigrationDirection>(), String(), String(), String(), String(), null);
+            return new MigrationInfo(Value<MigrationDirection>(), String(), String(), String(), ListOf(String()), null);
         }
     }
 }

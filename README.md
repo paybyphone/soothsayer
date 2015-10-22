@@ -127,9 +127,10 @@ _soothsayer_ requires a single configuration setting — `RunnerPath` — which 
 	  -i, --input        Required. The input folder containing both the
 						 roll-forward (up) and roll-back (down) sql scripts.
 
-	  -e, --environment  (Default: dev) The environment of the target Oracle
-						 instance. This enables running of environment specific
-						 scripts.
+	  -e, --environment  The environment of the target Oracle instance. This
+						 enables running of environment specific scripts. More
+						 than one environment can be specified, separated by a
+						 comma.
 
 	  -v, --version      The target database version to migrate up (or down) to.
 						 Migration will stop if the next script will bring the
