@@ -60,6 +60,7 @@
     <Compile Include="Commands\DatabaseCommandTests.cs" />
     <Compile Include="Commands\MigrateCommandTests.cs" />
     <Compile Include="Commands\ListCommandTests.cs" />
+    <Compile Include="SomeDatabaseTypes.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Infrastructure\CollectionExtensionsTests.cs" />
     <Compile Include="MockScriptScannerFactory.cs" />
@@ -71,7 +72,7 @@
     <Compile Include="Scanners\ScriptScannerFactoryTests.cs" />
     <Compile Include="Scanners\TermScriptScannerTests.cs" />
     <Compile Include="Scanners\UpScriptScannerTests.cs" />
-    <Compile Include="Some.cs" />
+    <Compile Include="SomeBasicTypes.cs" />
     <Compile Include="Migrations\TermMigrationTests.cs" />
     <Compile Include="Migrations\InitMigrationTests.cs" />
     <Compile Include="Migrations\UpMigrationTests.cs" />

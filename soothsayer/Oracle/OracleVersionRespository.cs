@@ -81,7 +81,8 @@ namespace soothsayer.Oracle
         {
             try
             {
-                _connection.Execute(@"INSERT INTO {0}.versions (id, version, script_name, applied_date) VALUES ({0}.versions_seq.nextval, :versionNumber, :scriptName, sysdate)".FormatWith(schema),
+                _connection.Execute(@"INSERT INTO {0}.versions (id, version, script_name, applied_date)
+                                        VALUES ({0}.versions_seq.nextval, :versionNumber, :scriptName, sysdate)".FormatWith(schema),
                     new
                     {
                         versionNumber = version.Version,
@@ -122,9 +123,21 @@ namespace soothsayer.Oracle
             }
         }
 
+        public bool VersionTableExists(string schema)
+        {
+            string sql =
+                @"select count(*) from all_tables where owner='{0}' and table_name='VERSIONS'".FormatWith(
+                    schema.ToUpper());
+
+            var count = _connection.Query<int>(sql).Single();
+            return count == 1;
+        }
+
         public void InitialiseVersioningTable(string schema, string tablespace = null)
         {
-            const string versionsTableSql = @"create table {0}.versions 
+            Output.Info("Creating the versioning table within the schema '{0}'".FormatWith(schema));
+
+            const string versionsTableSql = @"create table {0}.versions
                                                     (
                                                       id NUMBER not null,
                                                       version NUMBER not null,
@@ -144,13 +157,15 @@ namespace soothsayer.Oracle
                                                         minextents 1
                                                         maxextents unlimited
                                                       )";
-            const string versionsTableSequenceSql = @"create sequence {0}.versions_seq 
-	                                                    start with 1 
-	                                                    increment by 1 
-	                                                    nomaxvalue";
+            const string versionsTableSequenceSql = @"create sequence {0}.versions_seq
+                                                        start with 1
+                                                        increment by 1
+                                                        nomaxvalue";
 
             _connection.Execute(versionsTableSql.FormatWith(schema, tablespace ?? schema));
             _connection.Execute(versionsTableSequenceSql.FormatWith(schema));
+
+            Output.Info("Versioning table '{0}.versions' created".FormatWith(schema));
         }
     }
 }
