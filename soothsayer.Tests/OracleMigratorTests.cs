@@ -75,7 +75,7 @@ namespace soothsayer.Tests
         public void ensure_version_repository_is_initialised_when_running_an_up_migration()
         {
             var migrationInfo = new MigrationInfo(direction: MigrationDirection.Up, scriptFolder: Some.String(), targetSchema: "testSchema",
-                targetTablespace: "testTablespace", targetEnvironment: Some.String(), targetVersion: null);
+                targetTablespace: "testTablespace", targetEnvironment: Some.ListOf(Some.String()), targetVersion: null);
 
             _migrator.Migrate(Some.ConnectionInfo(), migrationInfo);
 

@@ -16,13 +16,13 @@ namespace soothsayer.Scanners
             _filesystem = filesystem;
         }
 
-        public IEnumerable<Script> Scan(string upScriptPath, string environment)
+        public IEnumerable<Script> Scan(string upScriptPath, params string[] environment)
         {
             var scriptFiles = _filesystem.GetFiles(upScriptPath, "*.sql")
                                        .OrderBy(s => s);
 
 			var filteredScriptFiles = scriptFiles.Where(s =>
-                s.FileName().Matches(FilePattern.ForEnvironment(environment))
+                environment.Any(e => s.FileName().Matches(FilePattern.ForEnvironment(e)))
                 || s.FileName().Matches(FilePattern.NoEnvironment));
 
 			return filteredScriptFiles.Select(s => new Script(s, ParseVersion(s.FileName())));

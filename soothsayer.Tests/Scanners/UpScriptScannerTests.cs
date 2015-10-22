@@ -2,7 +2,6 @@
 using System.Linq;
 using Moq;
 using NUnit.Framework;
-using soothsayer.Infrastructure;
 using soothsayer.Infrastructure.IO;
 using soothsayer.Scanners;
 
@@ -68,6 +67,19 @@ namespace soothsayer.Tests.Scanners
 
             var scriptFiles = Scanner.Scan(Some.Value("folder"), Some.Value("environment")).ToList();
             var expectedScripts = new[] { "26_z.environment.sql" };
+
+            Assert.That(scriptFiles.Count, Is.EqualTo(expectedScripts.Count()));
+            Assert.That(expectedScripts.All(e => scriptFiles.Any(s => s.Name.Equals(e))));
+        }
+
+        [Test]
+        public void script_files_which_matches_any_of_several_environments_are_returned()
+        {
+            MockFilesystem.Setup(m => m.GetFiles(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(new[] { "03_c.notmatching.sql", "01_a.notmatching.sql", "26_z.environment1.sql", "05_e.environment2.sql" });
+
+            var scriptFiles = Scanner.Scan(Some.Value("folder"), Some.Value("environment1"), Some.Value("environment2")).ToList();
+            var expectedScripts = new[] { "26_z.environment1.sql", "05_e.environment2.sql" };
 
             Assert.That(scriptFiles.Count, Is.EqualTo(expectedScripts.Count()));
             Assert.That(expectedScripts.All(e => scriptFiles.Any(s => s.Name.Equals(e))));
