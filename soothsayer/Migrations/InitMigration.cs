@@ -10,13 +10,11 @@ namespace soothsayer.Migrations
     public class InitMigration : IMigration
     {
         private readonly IDatabaseMetadataProvider _databaseMetadataProvider;
-        private readonly IVersionRespository _versionRespository;
         private readonly bool _force;
 
-        public InitMigration(IDatabaseMetadataProvider databaseMetadataProvider, IVersionRespository versionRespository, bool force)
+        public InitMigration(IDatabaseMetadataProvider databaseMetadataProvider, bool force)
         {
             _databaseMetadataProvider = databaseMetadataProvider;
-            _versionRespository = versionRespository;
             _force = force;
         }
 
@@ -24,11 +22,11 @@ namespace soothsayer.Migrations
         {
             if (!_databaseMetadataProvider.SchemaExists(schema))
             {
-                InitialiseDatabase(migrationScripts, scriptRunner, schema, tablespace);
+                InitialiseDatabase(migrationScripts, scriptRunner, schema);
             }
         }
 
-        private void InitialiseDatabase(IEnumerable<IScript> initScripts, IScriptRunner scriptRunner, string schema, string tablespace)
+        private void InitialiseDatabase(IEnumerable<IScript> initScripts, IScriptRunner scriptRunner, string schema)
         {
             Output.Warn("*** Target database could not be found and needs to be initialised before the migration can be run... ***");
             Output.EmptyLine();

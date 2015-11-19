@@ -14,6 +14,8 @@ namespace soothsayer.Tests
         private Mock<IConnectionFactory> _mockConnectionFactory;
         private Mock<IVersionRespository> _mockVersionRepository;
         private Mock<IVersionRespositoryFactory> _mockVersionRepositoryFactory;
+        private Mock<IAppliedScriptsRepository> _mockAppliedScriptRespository;
+        private Mock<IAppliedScriptsRepositoryFactory> _mockAppliedScriptRepositoryFactory;
         private Mock<IDatabaseMetadataProvider> _mockDatabaseMetadataProvider;
         private Mock<IDatabaseMetadataProviderFactory> _mockDatabaseMetadataProviderFactory;
         private MockScriptScannerFactory _mockScriptScannerFactory;
@@ -35,6 +37,10 @@ namespace soothsayer.Tests
             _mockVersionRepositoryFactory = new Mock<IVersionRespositoryFactory>();
             _mockVersionRepositoryFactory.Setup(m => m.Create(It.IsAny<IDbConnection>())).Returns(_mockVersionRepository.Object);
 
+            _mockAppliedScriptRespository = new Mock<IAppliedScriptsRepository>();
+            _mockAppliedScriptRepositoryFactory = new Mock<IAppliedScriptsRepositoryFactory>();
+            _mockAppliedScriptRepositoryFactory.Setup(m => m.Create(It.IsAny<IDbConnection>())).Returns(_mockAppliedScriptRespository.Object);
+
             _mockDatabaseMetadataProvider = new Mock<IDatabaseMetadataProvider>();
             _mockDatabaseMetadataProviderFactory = new Mock<IDatabaseMetadataProviderFactory>();
             _mockDatabaseMetadataProviderFactory.Setup(m => m.Create(It.IsAny<IDbConnection>())).Returns(_mockDatabaseMetadataProvider.Object);
@@ -45,7 +51,7 @@ namespace soothsayer.Tests
             _mockScriptRunnerFactory = new Mock<IScriptRunnerFactory>();
             _mockScriptRunnerFactory.Setup(m => m.Create(It.IsAny<DatabaseConnectionInfo>())).Returns(_mockScriptRunner.Object);
 
-            _migrator = new OracleMigrator(_mockConnectionFactory.Object, _mockVersionRepositoryFactory.Object, _mockDatabaseMetadataProviderFactory.Object, _mockScriptScannerFactory, _mockScriptRunnerFactory.Object);
+            _migrator = new OracleMigrator(_mockConnectionFactory.Object, _mockVersionRepositoryFactory.Object, _mockAppliedScriptRepositoryFactory.Object, _mockDatabaseMetadataProviderFactory.Object, _mockScriptScannerFactory, _mockScriptRunnerFactory.Object);
         }
 
         [Test]

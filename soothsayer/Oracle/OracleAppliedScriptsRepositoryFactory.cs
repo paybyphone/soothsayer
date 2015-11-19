@@ -2,7 +2,7 @@
 
 namespace soothsayer.Oracle
 {
-    public class OracleAppliedScriptsRepositoryFactory : IAppliedScriptRespositoryFactory
+    public class OracleAppliedScriptsRepositoryFactory : IAppliedScriptsRepositoryFactory
     {
         public IAppliedScriptsRepository Create(IDbConnection connection)
         {

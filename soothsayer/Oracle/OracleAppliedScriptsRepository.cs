@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using Dapper;
 using Oracle.ManagedDataAccess.Client;
 using soothsayer.Infrastructure;
@@ -17,44 +18,57 @@ namespace soothsayer.Oracle
             _connection = connection;
         }
 
-        public IScript GetAppliedScript(DatabaseVersion version, string schema)
+        public IScript GetAppliedScript(long version, string schema)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var appliedScripts = _connection.Query<StoredScript>(@"select version, script_name as scriptname, forward_script as scriptcontents from (select version, script_name from {0}.versions order by version desc, forward_script) where rownum <= 1".FormatWith(schema));
 
-            //try
-            //{
-            //    var appliedScripts = _connection.Query<Script>(@"select version, script_name as scriptname from (select version, script_name from {0}.versions order by version desc) where rownum <= 1".FormatWith(schema));
+                return appliedScripts.SingleOrDefault();
+            }
+            catch (OracleException oracleException)
+            {
+                if (oracleException.IsFor(OracleErrors.TableOrViewDoesNotExist))
+                {
+                    Output.Warn("Applied scripts table in schema '{0}' could not be found.".FormatWith(schema));
+                    return null;
+                }
 
-            //    return appliedScripts.SingleOrDefault();
-            //}
-            //catch (OracleException oracleException)
-            //{
-            //    if (oracleException.IsFor(OracleErrors.TableOrViewDoesNotExist))
-            //    {
-            //        Output.Warn("Applied scripts table in schema '{0}' could not be found.".FormatWith(schema));
-            //        return null;
-            //    }
-
-            //    throw;
-            //}
+                throw;
+            }
         }
 
-        public IScript GetRollbackScript(DatabaseVersion version, string schema)
+        public IScript GetRollbackScript(long version, string schema)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var appliedScripts = _connection.Query<StoredScript>(@"select version, script_name as scriptname, backward_script as scriptcontents from (select version, script_name from {0}.versions order by version desc, backward_script) where rownum <= 1".FormatWith(schema));
+
+                return appliedScripts.SingleOrDefault();
+            }
+            catch (OracleException oracleException)
+            {
+                if (oracleException.IsFor(OracleErrors.TableOrViewDoesNotExist))
+                {
+                    Output.Warn("Applied scripts table in schema '{0}' could not be found.".FormatWith(schema));
+                    return null;
+                }
+
+                throw;
+            }
         }
 
-        public void InsertAppliedScript(DatabaseVersion version, string schema, IScript script, IScript rollbackScript = null)
+        public void InsertAppliedScript(long version, string schema, IScript script, IScript rollbackScript = null)
         {
             var reader = new ScriptReader();
 
             try
             {
                 _connection.Execute(@"INSERT INTO {0}.appliedscripts (id, version_id, forward_script, backward_script)
-                                        VALUES ({0}.appliedscripts_seq.nextval, (SELECT version_id FROM {0}.versions WHERE version = :version), :forwardScript, :rollbackScript)".FormatWith(schema),
+                                        VALUES ({0}.appliedscripts_seq.nextval, (SELECT id as version_id FROM {0}.versions WHERE version = :version), :forwardScript, :rollbackScript)".FormatWith(schema),
                     new
                     {
-                        version = version.Version,
+                        version,
                         forwardScript = string.Join(Environment.NewLine, reader.GetContents(script.Path)),
                         rollbackScript = rollbackScript.IsNull() ? null : string.Join(Environment.NewLine, reader.GetContents(rollbackScript.Path))
                     });

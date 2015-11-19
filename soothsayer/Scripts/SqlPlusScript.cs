@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 
 namespace soothsayer.Scripts
 {
@@ -19,8 +18,7 @@ namespace soothsayer.Scripts
 
             using (var fileStream = File.OpenWrite(_wrappedScriptPath))
             {
-                var utfWithoutByteOrderMark = new UTF8Encoding(false);
-                using (var tempFile = new StreamWriter(fileStream, utfWithoutByteOrderMark))
+                using (var tempFile = new StreamWriter(fileStream, UTF8.WithoutByteOrderMark))
                 {
                     tempFile.WriteLine("SET ECHO ON");
                     tempFile.WriteLine("WHENEVER SQLERROR EXIT SQL.SQLCODE");
@@ -35,7 +33,7 @@ namespace soothsayer.Scripts
                 }
             }
         }
-
+        
         public void Dispose()
         {
             Dispose(true);

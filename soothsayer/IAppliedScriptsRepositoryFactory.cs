@@ -2,7 +2,7 @@
 
 namespace soothsayer
 {
-    public interface IAppliedScriptRespositoryFactory
+    public interface IAppliedScriptsRepositoryFactory
     {
         IAppliedScriptsRepository Create(IDbConnection connection);
     }

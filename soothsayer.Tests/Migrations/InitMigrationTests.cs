@@ -30,7 +30,7 @@ namespace soothsayer.Tests.Migrations
         [Test]
         public void when_there_are_no_migration_scripts_then_none_are_ever_executed()
         {
-            var migration = new InitMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, false);
+            var migration = new InitMigration(_mockMetadataProvider.Object, false);
             migration.Migrate(Enumerable.Empty<IScript>(), null, null, _mockScriptRunner.Object, Some.String(), Some.String());
 
             _mockScriptRunner.Verify(m => m.Execute(It.IsAny<IScript>()), Times.Never);
@@ -39,7 +39,7 @@ namespace soothsayer.Tests.Migrations
         [Test]
         public void for_each_migration_script_upgraded_no_versioning_is_necessary()
         {
-            var migration = new InitMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, false);
+            var migration = new InitMigration(_mockMetadataProvider.Object, false);
             migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String());
 
             _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[0].AsDatabaseVersion(), It.IsAny<string>()), Times.Never);

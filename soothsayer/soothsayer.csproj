@@ -64,7 +64,7 @@
     <Reference Include="System.Data.OracleClient" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAppliedScriptRespositoryFactory.cs" />
+    <Compile Include="IAppliedScriptsRepositoryFactory.cs" />
     <Compile Include="Oracle\OracleAppliedScriptsRepository.cs" />
     <Compile Include="Commands\DatabaseCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
@@ -139,7 +139,9 @@
     <Compile Include="Infrastructure\IO\PathExtensions.cs" />
     <Compile Include="Scripts\ScriptFolders.cs" />
     <Compile Include="Scripts\ScriptReader.cs" />
+    <Compile Include="Scripts\StoredScript.cs" />
     <Compile Include="Scripts\SqlPlusScript.cs" />
+    <Compile Include="Scripts\UTF8.cs" />
     <Compile Include="SqlPlusScriptRunnerFactory.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="Infrastructure\Slice.cs" />
