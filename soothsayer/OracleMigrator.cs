@@ -44,6 +44,7 @@ namespace soothsayer
                 Output.Text("Checking for the current database version.");
                 var oracleMetadataProvider = _databaseMetadataProviderFactory.Create(connection);
                 var oracleVersioning = _versionRespositoryFactory.Create(connection);
+                var oracleAppliedScriptsRepository = _appliedScriptsRepositoryFactory.Create(connection);
 
                 var currentVersion = oracleMetadataProvider.SchemaExists(migrationInfo.TargetSchema) ? oracleVersioning.GetCurrentVersion(migrationInfo.TargetSchema) : null;
                 Output.Info("The current database version is: {0}".FormatWith(currentVersion.IsNotNull() ? currentVersion.Version.ToString(CultureInfo.InvariantCulture) : "<empty>"));
@@ -64,9 +65,10 @@ namespace soothsayer
 
                 VerifyDownScripts(upScripts, downScripts);
 
-                var oracleAppliedScriptsRepository = _appliedScriptsRepositoryFactory.Create(connection);
+                var storedManoeuvres = oracleAppliedScriptsRepository.GetAppliedScripts(migrationInfo.TargetSchema).ToList();
+
                 var scriptRunner = _scriptRunnerFactory.Create(databaseConnectionInfo);
-                RunMigration(migrationInfo, currentVersion, initScripts, upScripts, downScripts, termScripts, scriptRunner, oracleMetadataProvider, oracleVersioning, oracleAppliedScriptsRepository);
+                RunMigration(migrationInfo, currentVersion, initScripts, upScripts, downScripts, termScripts, storedManoeuvres, scriptRunner, oracleMetadataProvider, oracleVersioning, oracleAppliedScriptsRepository);
 
                 if (oracleMetadataProvider.SchemaExists(migrationInfo.TargetSchema))
                 {
@@ -111,9 +113,8 @@ namespace soothsayer
             }
         }
 
-        private static void RunMigration(MigrationInfo migrationInfo, DatabaseVersion currentVersion, IEnumerable<Script> initScripts, IEnumerable<Script> upScripts,
-            IEnumerable<Script> downScripts, IEnumerable<Script> termScripts, IScriptRunner scriptRunner, IDatabaseMetadataProvider databaseMetadataProvider,
-            IVersionRespository versionRespository, IAppliedScriptsRepository appliedScriptsRepository)
+        private static void RunMigration(MigrationInfo migrationInfo, DatabaseVersion currentVersion, IEnumerable<Script> initScripts, IEnumerable<Script> upScripts, IEnumerable<Script> downScripts, IEnumerable<Script> termScripts, 
+            IList<IManoeuvre> storedManoeuvres, IScriptRunner scriptRunner, IDatabaseMetadataProvider databaseMetadataProvider, IVersionRespository versionRespository, IAppliedScriptsRepository appliedScriptsRepository)
         {
             var upDownManoeuvres = upScripts.Select(u => new DatabaseManoeuvre(u, downScripts.FirstOrDefault(d => d.Version == u.Version))).ToList();
             var initTermManoeuvres = initScripts.Select(i => new DatabaseManoeuvre(i, termScripts.FirstOrDefault(t => t.Version == i.Version))).ToList();
@@ -121,8 +122,17 @@ namespace soothsayer
             if (migrationInfo.Direction == MigrationDirection.Down)
             {
                 var downMigration = new DownMigration(databaseMetadataProvider, versionRespository, appliedScriptsRepository, migrationInfo.Forced);
-                downMigration.Migrate(upDownManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
 
+                if (storedManoeuvres.Any())
+                {
+                    Output.Text("Stored applied scripts were found, will use those for downward migration");
+                    downMigration.Migrate(storedManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
+                }
+                else
+                {
+                    downMigration.Migrate(upDownManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
+                }
+                
                 if (!migrationInfo.TargetVersion.HasValue)
                 {
                     var termMigration = new TermMigration(databaseMetadataProvider, migrationInfo.Forced);

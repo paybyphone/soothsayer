@@ -22,10 +22,12 @@ namespace soothsayer.Migrations
 
         public void Migrate(IEnumerable<IManoeuvre> migrationManoeuvres, DatabaseVersion currentVersion, long? targetVersion, IScriptRunner scriptRunner, string schema, string tablespace)
         {
-            var migrationScripts = migrationManoeuvres.Select(m => m.ForwardScript);
-            var backwardScripts = migrationManoeuvres.Select(m => m.BackwardScript);
+            var manoeuvres = migrationManoeuvres as IList<IManoeuvre> ?? migrationManoeuvres.ToList();
 
-            var applicableScripts = migrationScripts.Where(s => currentVersion.IsNull() || s.Version > currentVersion.Version)
+            var forwardScripts = manoeuvres.Select(m => m.ForwardScript).ToList();
+            var backwardScripts = manoeuvres.Select(m => m.BackwardScript).ToList();
+
+            var applicableScripts = forwardScripts.Where(s => currentVersion.IsNull() || s.Version > currentVersion.Version)
                     .Where(s => !targetVersion.HasValue || s.Version <= targetVersion).ToArray();
 
             if (applicableScripts.IsNullOrEmpty())
