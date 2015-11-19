@@ -115,8 +115,8 @@ namespace soothsayer
             IEnumerable<Script> downScripts, IEnumerable<Script> termScripts, IScriptRunner scriptRunner, IDatabaseMetadataProvider databaseMetadataProvider,
             IVersionRespository versionRespository, IAppliedScriptsRepository appliedScriptsRepository)
         {
-            var upDownManoeuvres = upScripts.Select(u => new DatabaseManoeuvre(u.Version, u, downScripts.FirstOrDefault(d => d.Version == u.Version))).ToList();
-            var initTermManoeuvres = initScripts.Select(i => new DatabaseManoeuvre(i.Version, i, termScripts.FirstOrDefault(t => t.Version == i.Version))).ToList();
+            var upDownManoeuvres = upScripts.Select(u => new DatabaseManoeuvre(u, downScripts.FirstOrDefault(d => d.Version == u.Version))).ToList();
+            var initTermManoeuvres = initScripts.Select(i => new DatabaseManoeuvre(i, termScripts.FirstOrDefault(t => t.Version == i.Version))).ToList();
 
             if (migrationInfo.Direction == MigrationDirection.Down)
             {
