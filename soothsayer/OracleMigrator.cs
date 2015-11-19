@@ -65,7 +65,14 @@ namespace soothsayer
 
                 VerifyDownScripts(upScripts, downScripts);
 
-                var storedManoeuvres = oracleAppliedScriptsRepository.GetAppliedScripts(migrationInfo.TargetSchema).ToList();
+                var storedManoeuvres = new List<IManoeuvre>();
+                if (migrationInfo.UseStored)
+                {
+                    Output.Info("--usestored was specified, fetching set of applied scripts stored in the target database...".FormatWith());
+                    storedManoeuvres = oracleAppliedScriptsRepository.GetAppliedScripts(migrationInfo.TargetSchema).ToList();
+                    Output.Text("    {0} stored applied scripts found.".FormatWith(storedManoeuvres.Count));
+                    Output.EmptyLine();
+                }
 
                 var scriptRunner = _scriptRunnerFactory.Create(databaseConnectionInfo);
                 RunMigration(migrationInfo, currentVersion, initScripts, upScripts, downScripts, termScripts, storedManoeuvres, scriptRunner, oracleMetadataProvider, oracleVersioning, oracleAppliedScriptsRepository);
@@ -125,7 +132,7 @@ namespace soothsayer
 
                 if (storedManoeuvres.Any())
                 {
-                    Output.Text("Stored applied scripts were found, will use those for downward migration");
+                    Output.Warn("NOTE: Using stored applied scripts to perform downgrade instead of local 'down' scripts.");
                     downMigration.Migrate(storedManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
                 }
                 else

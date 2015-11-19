@@ -63,6 +63,7 @@ namespace soothsayer.Commands
                                         migrateCommandOptions.Tablespace,
                                         migrateCommandOptions.Environment,
                                         migrateCommandOptions.Version,
+                                        migrateCommandOptions.UseStored,
                                         migrateCommandOptions.Force);
 
                 _migrator.Migrate(databaseConnectionInfo, migrationInfo);
