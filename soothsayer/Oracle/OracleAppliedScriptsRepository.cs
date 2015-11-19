@@ -85,6 +85,37 @@ namespace soothsayer.Oracle
             }
         }
 
+        public void RemoveAppliedScript(long version, string schema)
+        {
+            try
+            {
+                _connection.Execute(@"DELETE FROM {0}.appliedscripts WHERE version_id = (SELECT id FROM {0}.versions WHERE version = :version)".FormatWith(schema),
+                    new
+                    {
+                        version
+                    });
+            }
+            catch (OracleException oracleException)
+            {
+                if (oracleException.IsFor(OracleErrors.TableOrViewDoesNotExist))
+                {
+                    Output.Warn("Applied scripts table in schema '{0}' could not be found, applied script could not be recorded.".FormatWith(schema));
+                    return;
+                }
+
+                throw;
+            }
+        }
+
+        public bool AppliedScriptsTableExists(string schema)
+        {
+            string sql = @"select count(*) from all_tables where owner='{0}' and table_name='APPLIEDSCRIPTS'".FormatWith(schema.ToUpper());
+
+            var count = _connection.ExecuteScalar<int>(sql);
+
+            return count > 0;
+        }
+
         public void InitialiseAppliedScriptsTable(string schema, string tablespace = null)
         {
             const string appliedScriptsTableSql = @"create table {0}.appliedscripts

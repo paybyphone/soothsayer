@@ -10,16 +10,21 @@ namespace soothsayer.Migrations
     public class UpMigration : IMigration
     {
         private readonly IVersionRespository _versionRespository;
+        private readonly IAppliedScriptsRepository _appliedScriptsRepository;
         private readonly bool _force;
 
-        public UpMigration(IVersionRespository versionRespository, bool force)
+        public UpMigration(IVersionRespository versionRespository, IAppliedScriptsRepository appliedScriptsRepository, bool force)
         {
             _versionRespository = versionRespository;
+            _appliedScriptsRepository = appliedScriptsRepository;
             _force = force;
         }
 
-        public void Migrate(IEnumerable<IScript> migrationScripts, DatabaseVersion currentVersion, long? targetVersion, IScriptRunner scriptRunner, string schema, string tablespace)
+        public void Migrate(IEnumerable<IManoeuvre> migrationManoeuvres, DatabaseVersion currentVersion, long? targetVersion, IScriptRunner scriptRunner, string schema, string tablespace)
         {
+            var migrationScripts = migrationManoeuvres.Select(m => m.ForwardScript);
+            var backwardScripts = migrationManoeuvres.Select(m => m.BackwardScript);
+
             var applicableScripts = migrationScripts.Where(s => currentVersion.IsNull() || s.Version > currentVersion.Version)
                     .Where(s => !targetVersion.HasValue || s.Version <= targetVersion).ToArray();
 
@@ -58,6 +63,9 @@ namespace soothsayer.Migrations
 
                     Output.Text("Adding version {0} for script '{1}' to version table".FormatWith(script.Version, script.Name));
                     _versionRespository.InsertVersion(script.AsDatabaseVersion(), schema);
+
+                    Output.Text("Adding script contents for script '{0}' to applied scripts table".FormatWith(script.Name));
+                    _appliedScriptsRepository.InsertAppliedScript(script.Version, schema, script, backwardScripts.FirstOrDefault(m => m.Version == script.Version));
                 }
             }
         }

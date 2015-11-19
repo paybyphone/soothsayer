@@ -113,17 +113,20 @@ namespace soothsayer
 
         private static void RunMigration(MigrationInfo migrationInfo, DatabaseVersion currentVersion, IEnumerable<Script> initScripts, IEnumerable<Script> upScripts,
             IEnumerable<Script> downScripts, IEnumerable<Script> termScripts, IScriptRunner scriptRunner, IDatabaseMetadataProvider databaseMetadataProvider,
-            IVersionRespository versionRespository, IAppliedScriptsRepository oracleAppliedScriptsRepository)
+            IVersionRespository versionRespository, IAppliedScriptsRepository appliedScriptsRepository)
         {
+            var upDownManoeuvres = upScripts.Select(u => new DatabaseManoeuvre(u.Version, u, downScripts.FirstOrDefault(d => d.Version == u.Version))).ToList();
+            var initTermManoeuvres = initScripts.Select(i => new DatabaseManoeuvre(i.Version, i, termScripts.FirstOrDefault(t => t.Version == i.Version))).ToList();
+
             if (migrationInfo.Direction == MigrationDirection.Down)
             {
-                var downMigration = new DownMigration(databaseMetadataProvider, versionRespository, migrationInfo.Forced);
-                downMigration.Migrate(downScripts, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
+                var downMigration = new DownMigration(databaseMetadataProvider, versionRespository, appliedScriptsRepository, migrationInfo.Forced);
+                downMigration.Migrate(upDownManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
 
                 if (!migrationInfo.TargetVersion.HasValue)
                 {
                     var termMigration = new TermMigration(databaseMetadataProvider, migrationInfo.Forced);
-                    termMigration.Migrate(termScripts, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
+                    termMigration.Migrate(initTermManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
                 }
                 else
                 {
@@ -133,28 +136,23 @@ namespace soothsayer
             else
             {
                 var initMigration = new InitMigration(databaseMetadataProvider, migrationInfo.Forced);
-                initMigration.Migrate(initScripts, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
+                initMigration.Migrate(initTermManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
 
                 EnsureVersioningTableIsInitialised(versionRespository, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
-
-                var upScriptsList = upScripts as IList<Script> ?? upScripts.ToList();
+                EnsureAppliedScriptsTableIsInitialised(appliedScriptsRepository, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
                 
-                var upMigration = new UpMigration(versionRespository, migrationInfo.Forced);
-                upMigration.Migrate(upScriptsList, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
-
-                StoreScripts(upScriptsList, downScripts, migrationInfo, oracleAppliedScriptsRepository);
+                var upMigration = new UpMigration(versionRespository, appliedScriptsRepository, migrationInfo.Forced);
+                upMigration.Migrate(upDownManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
             }
         }
 
-        private static void StoreScripts(IEnumerable<IScript> upScripts, IEnumerable<IScript> downScripts, MigrationInfo migrationInfo, IAppliedScriptsRepository oracleAppliedScriptsRepository)
+        private static void EnsureAppliedScriptsTableIsInitialised(IAppliedScriptsRepository appliedScriptsRepository, string targetSchema, string targetTablespace)
         {
-            var scriptPairs = upScripts.Select(u => new { Up = u, Down = downScripts.FirstOrDefault(d => d.Version == u.Version) });
+            bool alreadyInitialised = appliedScriptsRepository.AppliedScriptsTableExists(targetSchema);
 
-            oracleAppliedScriptsRepository.InitialiseAppliedScriptsTable(migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
-
-            foreach (var scriptPair in scriptPairs)
+            if (!alreadyInitialised)
             {
-                oracleAppliedScriptsRepository.InsertAppliedScript(scriptPair.Up.Version, migrationInfo.TargetSchema, scriptPair.Up, scriptPair.Down);
+                appliedScriptsRepository.InitialiseAppliedScriptsTable(targetSchema, targetTablespace);
             }
         }
 

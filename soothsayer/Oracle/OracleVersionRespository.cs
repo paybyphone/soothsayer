@@ -125,9 +125,7 @@ namespace soothsayer.Oracle
 
         public bool VersionTableExists(string schema)
         {
-            string sql =
-                @"select count(*) from all_tables where owner='{0}' and table_name='VERSIONS'".FormatWith(
-                    schema.ToUpper());
+            string sql = @"select count(*) from all_tables where owner='{0}' and table_name='VERSIONS'".FormatWith(schema.ToUpper());
 
             var count = _connection.Query<int>(sql).Single();
             return count == 1;
