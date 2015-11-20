@@ -1,9 +1,6 @@
-﻿using System.Data;
-
-namespace soothsayer
+﻿namespace soothsayer
 {
-    public interface IAppliedScriptsRepositoryFactory
+    public interface IAppliedScriptsRepositoryFactory : ICreateFromDatabaseConnection<IAppliedScriptsRepository>
     {
-        IAppliedScriptsRepository Create(IDbConnection connection);
     }
 }

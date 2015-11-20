@@ -1,9 +1,6 @@
-﻿using System.Data;
-
-namespace soothsayer
+﻿namespace soothsayer
 {
-    public interface IVersionRespositoryFactory
+    public interface IVersionRespositoryFactory : ICreateFromDatabaseConnection<IVersionRespository>
     {
-        IVersionRespository Create(IDbConnection connection);
     }
 }
