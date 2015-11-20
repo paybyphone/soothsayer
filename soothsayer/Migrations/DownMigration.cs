@@ -76,7 +76,7 @@ namespace soothsayer.Migrations
                     Output.Info("Script '{0}' completed.".FormatWith(script.Name));
 
                     Output.Text("Removing script contents for script '{0}' from applied scripts table".FormatWith(script.Name));
-                    _appliedScriptsRepository.RemoveAppliedScript(script.Version, schema);
+                    _appliedScriptsRepository.RemoveAppliedScript(script.AsDatabaseVersion(), schema);
 
                     Output.Text("Removing version {0} for script '{1}' from version table".FormatWith(script.Version, script.Name));
                     _versionRespository.RemoveVersion(script.AsDatabaseVersion(), schema);

@@ -87,5 +87,28 @@ namespace soothsayer.Tests
 
             _mockVersionRepository.Verify(m => m.InitialiseVersioningTable("testSchema", "testTablespace"));
         }
+
+        [Test]
+        public void ensure_applied_scripts_repository_is_initialised_when_running_an_up_migration()
+        {
+            var migrationInfo = new MigrationInfo(direction: MigrationDirection.Up, scriptFolder: Some.String(), targetSchema: "testSchema",
+                targetTablespace: "testTablespace", targetEnvironment: Some.ListOf(Some.String()), targetVersion: null);
+
+            _migrator.Migrate(Some.ConnectionInfo(), migrationInfo);
+
+            _mockAppliedScriptRespository.Verify(m => m.InitialiseAppliedScriptsTable("testSchema", "testTablespace"));
+        }
+
+        [Test]
+        public void when_there_are_applied_scripts_stored_in_the_target_database_then_those_can_be_retrieved_for_down_migrations()
+        {
+            const string downScriptPath = "RB_20150406_scriptpath";
+            _mockScriptScannerFactory.GetMock(ScriptFolders.Down).Setup(m => m.Scan(It.IsAny<string>(), It.IsAny<string>())).Returns(new[] { new Script(downScriptPath, 1) });
+            
+            _migrator.Migrate(Some.ConnectionInfo(), new MigrationInfo(direction: MigrationDirection.Down, scriptFolder: Some.String(), targetSchema: "testSchema",
+                targetTablespace: "testTablespace", targetEnvironment: Some.ListOf(Some.String()), targetVersion: null, useStored: true));
+            
+            _mockAppliedScriptRespository.Verify(m => m.GetAppliedScripts("testSchema"), Times.Once);
+        }
     }
 }

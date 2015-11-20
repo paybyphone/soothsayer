@@ -67,7 +67,7 @@ namespace soothsayer.Migrations
                     _versionRespository.InsertVersion(script.AsDatabaseVersion(), schema);
 
                     Output.Text("Adding script contents for script '{0}' to applied scripts table".FormatWith(script.Name));
-                    _appliedScriptsRepository.InsertAppliedScript(script.Version, schema, script, backwardScripts.FirstOrDefault(m => m.IsNotNull() && m.Version == script.Version));
+                    _appliedScriptsRepository.InsertAppliedScript(script.AsDatabaseVersion(), schema, script, backwardScripts.FirstOrDefault(m => m.IsNotNull() && m.Version == script.Version));
                 }
             }
         }

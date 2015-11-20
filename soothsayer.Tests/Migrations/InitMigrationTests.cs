@@ -11,7 +11,7 @@ namespace soothsayer.Tests.Migrations
     [TestFixture]
     public class InitMigrationTests
     {
-        public List<IManoeuvre> SomeScripts = new List<IManoeuvre> { new DatabaseManoeuvre(new Script("foo", 1), null), new DatabaseManoeuvre(new Script("bar", 2), null) };
+        public List<IManoeuvre> SomeScripts = new List<IManoeuvre> { DatabaseManoeuvre.ForwardOnly(new Script("foo", 1)), DatabaseManoeuvre.ForwardOnly(new Script("bar", 2)) };
 
         private Mock<IDatabaseMetadataProvider> _mockMetadataProvider;
         private Mock<IVersionRespository> _mockVersionRepository;

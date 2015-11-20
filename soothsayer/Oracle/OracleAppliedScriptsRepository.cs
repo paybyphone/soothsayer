@@ -39,7 +39,7 @@ namespace soothsayer.Oracle
             }
         }
         
-        public void InsertAppliedScript(long version, string schema, IScript script, IScript rollbackScript = null)
+        public void InsertAppliedScript(DatabaseVersion version, string schema, IScript script, IScript rollbackScript = null)
         {
             var reader = new ScriptReader();
 
@@ -49,7 +49,7 @@ namespace soothsayer.Oracle
                                         VALUES ({0}.appliedscripts_seq.nextval, (SELECT id as version_id FROM {0}.versions WHERE version = :version), :forwardScript, :rollbackScript)".FormatWith(schema),
                     new
                     {
-                        version,
+                        version = version.Version,
                         forwardScript = string.Join(Environment.NewLine, reader.GetContents(script.Path)),
                         rollbackScript = rollbackScript.IsNull() ? null : string.Join(Environment.NewLine, reader.GetContents(rollbackScript.Path))
                     });
@@ -66,14 +66,14 @@ namespace soothsayer.Oracle
             }
         }
 
-        public void RemoveAppliedScript(long version, string schema)
+        public void RemoveAppliedScript(DatabaseVersion version, string schema)
         {
             try
             {
                 _connection.Execute(@"DELETE FROM {0}.appliedscripts WHERE version_id = (SELECT id FROM {0}.versions WHERE version = :version)".FormatWith(schema),
                     new
                     {
-                        version
+                        version = version.Version
                     });
             }
             catch (OracleException oracleException)

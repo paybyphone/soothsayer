@@ -12,7 +12,7 @@ namespace soothsayer.Tests.Migrations
     [TestFixture]
     public class DownMigrationTests
     {
-        public List<IManoeuvre> SomeScripts = new List<IManoeuvre> { new DatabaseManoeuvre(null, new Script("foo", 1)), new DatabaseManoeuvre(null, new Script("bar", 2)), new DatabaseManoeuvre(null, new Script("baz", 3)) };
+        public List<IManoeuvre> SomeScripts = new List<IManoeuvre> { DatabaseManoeuvre.BackwardOnly(new Script("foo", 1)), DatabaseManoeuvre.BackwardOnly(new Script("bar", 2)), DatabaseManoeuvre.BackwardOnly(new Script("baz", 3)) };
 
         private Mock<IDatabaseMetadataProvider> _mockMetadataProvider;
         private Mock<IVersionRespository> _mockVersionRepository;
