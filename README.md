@@ -67,6 +67,22 @@ Only scripts which either do not specify an environment, or match the specified 
 
 By default, the environment is set to `dev`.
 
+## Stored Applied Scripts ##
+As scripts are executed against the database, they are also stored in the target schema. Both the roll forward and roll back scripts are stored.
+As well as enabling a trail of what commands have been executed against the database, it also enables for `down` migrations to be performed using the roll back scripts stored in the database (using the `--usestored` switch).
+
+```PLSQL
+create table <schema>.appliedscripts
+       (
+           id NUMBER not null,
+           version_id NUMBER not null,
+           forward_script CLOB not null,
+           backward_script CLOB null,
+           CONSTRAINT appliedscripts_pk PRIMARY KEY (id),
+           CONSTRAINT fk_version_id FOREIGN KEY (version_id) REFERENCES <schema>.versions(id)
+       )
+```
+
 ## Configuration ##
 _soothsayer_ requires a single configuration setting — `RunnerPath` — which should be set to the path of the _SQL*Plus_ executable. The installer for _SQL*Plus_ is made available by Oracle as part of their _Instant Client_ tools.
 
@@ -145,6 +161,10 @@ _soothsayer_ requires a single configuration setting — `RunnerPath` — which 
 						 specified here (or lower in the case of roll-backs).
 
 	  --concise          Suppresses verbose information (such as SqlPlus output)
+
+      --usestored        (Default: False) Tells soothsayer to ignore the down
+                         migration script files and use the stored scripts in the
+                         target database schema.
 
 	  --force            (Default: False) Tells soothsayer to ignore any errors
 						 from executing scripts within SQL*Plus and continue
