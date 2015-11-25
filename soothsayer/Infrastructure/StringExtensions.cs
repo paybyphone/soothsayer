@@ -22,6 +22,11 @@ namespace soothsayer.Infrastructure
 
         public static string Join(this ICollection<string> strings)
         {
+            if (strings.IsNull())
+            {
+                return null;
+            }
+
             return string.Join(", ", strings);
         }
     }
