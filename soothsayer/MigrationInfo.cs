@@ -5,7 +5,7 @@ namespace soothsayer
     public class MigrationInfo
     {
         public MigrationInfo(MigrationDirection direction, string scriptFolder, string targetSchema, string targetTablespace, IList<string> targetEnvironment,
-            long? targetVersion, bool forced = false)
+            long? targetVersion, bool useStored = false, bool forced = false)
         {
             Direction = direction;
             ScriptFolder = scriptFolder;
@@ -13,6 +13,7 @@ namespace soothsayer
             TargetTablespace = targetTablespace;
             TargetEnvironment = targetEnvironment;
             TargetVersion = targetVersion;
+            UseStored = useStored;
             Forced = forced;
         }
 
@@ -24,6 +25,7 @@ namespace soothsayer
         public IList<string> TargetEnvironment { get; private set; }
         public long? TargetVersion { get; private set; }
 
+        public bool UseStored { get; private set; }
         public bool Forced { get; private set; }
     }
 }

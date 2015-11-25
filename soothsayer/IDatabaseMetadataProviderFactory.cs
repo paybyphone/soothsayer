@@ -1,9 +1,6 @@
-﻿using System.Data;
-
-namespace soothsayer
+﻿namespace soothsayer
 {
-    public interface IDatabaseMetadataProviderFactory
+    public interface IDatabaseMetadataProviderFactory : ICreateFromDatabaseConnection<IDatabaseMetadataProvider>
     {
-        IDatabaseMetadataProvider Create(IDbConnection connection);
     }
 }

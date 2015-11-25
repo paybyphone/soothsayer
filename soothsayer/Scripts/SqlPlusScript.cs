@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 
 namespace soothsayer.Scripts
 {
@@ -15,15 +14,16 @@ namespace soothsayer.Scripts
 
             _wrappedScriptPath = System.IO.Path.GetTempFileName();
 
+            var reader = new ScriptReader();
+
             using (var fileStream = File.OpenWrite(_wrappedScriptPath))
             {
-                var utfWithoutByteOrderMark = new UTF8Encoding(false);
-                using (var tempFile = new StreamWriter(fileStream, utfWithoutByteOrderMark))
+                using (var tempFile = new StreamWriter(fileStream, UTF8.WithoutByteOrderMark))
                 {
                     tempFile.WriteLine("SET ECHO ON");
                     tempFile.WriteLine("WHENEVER SQLERROR EXIT SQL.SQLCODE");
 
-                    foreach (var scriptLine in File.ReadAllLines(_script.Path))
+                    foreach (var scriptLine in reader.GetContents(_script.Path))
                     {
                         tempFile.WriteLine(scriptLine);
                     }
@@ -33,7 +33,7 @@ namespace soothsayer.Scripts
                 }
             }
         }
-
+        
         public void Dispose()
         {
             Dispose(true);

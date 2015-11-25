@@ -11,22 +11,24 @@ namespace soothsayer.Migrations
     {
         private readonly IDatabaseMetadataProvider _databaseMetadataProvider;
         private readonly IVersionRespository _versionRespository;
+        private readonly IAppliedScriptsRepository _appliedScriptsRepository;
         private readonly bool _force;
 
-        public DownMigration(IDatabaseMetadataProvider databaseMetadataProvider, IVersionRespository versionRespository, bool force)
+        public DownMigration(IDatabaseMetadataProvider databaseMetadataProvider, IVersionRespository versionRespository, IAppliedScriptsRepository appliedScriptsRepository, bool force)
         {
             _databaseMetadataProvider = databaseMetadataProvider;
             _versionRespository = versionRespository;
+            _appliedScriptsRepository = appliedScriptsRepository;
             _force = force;
         }
 
-        public void Migrate(IEnumerable<IScript> migrationScripts, DatabaseVersion currentVersion, long? targetVersionNumber, IScriptRunner scriptRunner, string schema, string tablespace)
+        public void Migrate(IEnumerable<IManoeuvre> migrationManoeuvres, DatabaseVersion currentVersion, long? targetVersionNumber, IScriptRunner scriptRunner, string schema, string tablespace)
         {
             if (_databaseMetadataProvider.SchemaExists(schema))
             {
                 if (_versionRespository.GetCurrentVersion(schema).IsNotNull())
                 {
-                    DowngradeDatabase(migrationScripts, currentVersion, targetVersionNumber, scriptRunner, schema);
+                    DowngradeDatabase(migrationManoeuvres.Select(m => m.BackwardScript).Where(m => m.IsNotNull()), currentVersion, targetVersionNumber, scriptRunner, schema);
                 }
                 else
                 {
@@ -72,6 +74,9 @@ namespace soothsayer.Migrations
                     }
 
                     Output.Info("Script '{0}' completed.".FormatWith(script.Name));
+
+                    Output.Text("Removing script contents for script '{0}' from applied scripts table".FormatWith(script.Name));
+                    _appliedScriptsRepository.RemoveAppliedScript(script.AsDatabaseVersion(), schema);
 
                     Output.Text("Removing version {0} for script '{1}' from version table".FormatWith(script.Version, script.Name));
                     _versionRespository.RemoveVersion(script.AsDatabaseVersion(), schema);

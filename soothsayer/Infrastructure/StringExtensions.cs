@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace soothsayer.Infrastructure
 {
@@ -16,6 +18,11 @@ namespace soothsayer.Infrastructure
 
         public static string FormatInvariant(this string s, params object[] args) {
             return string.Format(CultureInfo.InvariantCulture, s, args);
+        }
+
+        public static string Join(this ICollection<string> strings)
+        {
+            return string.Join(", ", strings);
         }
     }
 }

@@ -125,9 +125,7 @@ namespace soothsayer.Oracle
 
         public bool VersionTableExists(string schema)
         {
-            string sql =
-                @"select count(*) from all_tables where owner='{0}' and table_name='VERSIONS'".FormatWith(
-                    schema.ToUpper());
+            string sql = @"select count(*) from all_tables where owner='{0}' and table_name='VERSIONS'".FormatWith(schema.ToUpper());
 
             var count = _connection.Query<int>(sql).Single();
             return count == 1;
@@ -158,8 +156,8 @@ namespace soothsayer.Oracle
                                                         maxextents unlimited
                                                       )";
             const string versionsTableSequenceSql = @"create sequence {0}.versions_seq
-                                                        start with 1
-                                                        increment by 1
+	                                                    start with 1 
+	                                                    increment by 1 
                                                         nomaxvalue";
 
             _connection.Execute(versionsTableSql.FormatWith(schema, tablespace ?? schema));

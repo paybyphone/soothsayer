@@ -50,6 +50,10 @@ namespace soothsayer.Commands
             HelpText = "Suppresses verbose information (such as SqlPlus output)")]
         public bool Concise { get; set; }
 
+        [Option("usestored", Required = false, DefaultValue = false, MutuallyExclusiveSet = "downgrade",
+            HelpText = "Tells soothsayer to ignore the down migration script files and use the stored scripts in the target database schema.")]
+        public bool UseStored { get; set; }
+
         [Option("force", Required = false, DefaultValue = false,
             HelpText = "Tells soothsayer to ignore any errors from executing scripts within SQL*Plus and continue execution of all the scripts.")]
         public bool Force { get; set; }

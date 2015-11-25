@@ -64,11 +64,16 @@
     <Reference Include="System.Data.OracleClient" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAppliedScriptsRepositoryFactory.cs" />
+    <Compile Include="ICreateFromDatabaseConnection.cs" />
+    <Compile Include="Oracle\AppliedScriptDto.cs" />
+    <Compile Include="Oracle\OracleAppliedScriptsRepository.cs" />
     <Compile Include="Commands\DatabaseCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ListCommand.cs" />
     <Compile Include="Commands\MigrateCommand.cs" />
     <Compile Include="Commands\IDatabaseCommandOptions.cs" />
+    <Compile Include="IAppliedScriptsRepository.cs" />
     <Compile Include="IDatabaseMetadataProviderFactory.cs" />
     <Compile Include="Infrastructure\Configuration\ConfigSection.cs" />
     <Compile Include="Infrastructure\IO\ColorConsoleAdapter.cs" />
@@ -99,6 +104,7 @@
     <Compile Include="IScriptRunner.cs" />
     <Compile Include="IConnectionFactory.cs" />
     <Compile Include="IVersionRespositoryFactory.cs" />
+    <Compile Include="Oracle\OracleAppliedScriptsRepositoryFactory.cs" />
     <Compile Include="Oracle\OracleMetadataProvider.cs" />
     <Compile Include="Oracle\OracleVersionRespositoryFactory.cs" />
     <Compile Include="Scanners\DownScriptScanner.cs" />
@@ -109,6 +115,8 @@
     <Compile Include="Scanners\InitScriptScanner.cs" />
     <Compile Include="Scanners\IScriptScannerFactory.cs" />
     <Compile Include="Scanners\ScriptScannerFactory.cs" />
+    <Compile Include="Scripts\DatabaseManoeuvre.cs" />
+    <Compile Include="Scripts\IManoeuvre.cs" />
     <Compile Include="Scripts\IScript.cs" />
     <Compile Include="Scanners\IScriptScanner.cs" />
     <Compile Include="Infrastructure\IO\Output.cs" />
@@ -134,7 +142,10 @@
     <Compile Include="Infrastructure\StringExtensions.cs" />
     <Compile Include="Infrastructure\IO\PathExtensions.cs" />
     <Compile Include="Scripts\ScriptFolders.cs" />
+    <Compile Include="Scripts\ScriptReader.cs" />
+    <Compile Include="Scripts\StoredScript.cs" />
     <Compile Include="Scripts\SqlPlusScript.cs" />
+    <Compile Include="Scripts\UTF8.cs" />
     <Compile Include="SqlPlusScriptRunnerFactory.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="Infrastructure\Slice.cs" />
