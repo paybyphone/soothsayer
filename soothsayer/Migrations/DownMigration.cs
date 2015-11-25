@@ -28,7 +28,7 @@ namespace soothsayer.Migrations
             {
                 if (_versionRespository.GetCurrentVersion(schema).IsNotNull())
                 {
-                    DowngradeDatabase(migrationSteps.Select(m => m.BackwardScript).Where(m => m.IsNotNull()), currentVersion, targetVersionNumber, scriptRunner, schema);
+                    DowngradeDatabase(migrationSteps.Select(m => m.BackwardScript).Where(m => m.IsNotNull()).OrderByDescending(m => m.Version), currentVersion, targetVersionNumber, scriptRunner, schema);
                 }
                 else
                 {
