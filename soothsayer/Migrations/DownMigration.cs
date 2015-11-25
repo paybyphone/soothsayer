@@ -22,13 +22,13 @@ namespace soothsayer.Migrations
             _force = force;
         }
 
-        public void Migrate(IEnumerable<IManoeuvre> migrationManoeuvres, DatabaseVersion currentVersion, long? targetVersionNumber, IScriptRunner scriptRunner, string schema, string tablespace)
+        public void Migrate(IEnumerable<IStep> migrationSteps, DatabaseVersion currentVersion, long? targetVersionNumber, IScriptRunner scriptRunner, string schema, string tablespace)
         {
             if (_databaseMetadataProvider.SchemaExists(schema))
             {
                 if (_versionRespository.GetCurrentVersion(schema).IsNotNull())
                 {
-                    DowngradeDatabase(migrationManoeuvres.Select(m => m.BackwardScript).Where(m => m.IsNotNull()), currentVersion, targetVersionNumber, scriptRunner, schema);
+                    DowngradeDatabase(migrationSteps.Select(m => m.BackwardScript).Where(m => m.IsNotNull()), currentVersion, targetVersionNumber, scriptRunner, schema);
                 }
                 else
                 {

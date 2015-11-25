@@ -12,7 +12,7 @@ namespace soothsayer.Tests.Migrations
     [TestFixture]
     public class UpMigrationTests
     {
-        public List<IManoeuvre> SomeScripts = new List<IManoeuvre> { DatabaseManoeuvre.ForwardOnly(new Script("foo", 1)), DatabaseManoeuvre.ForwardOnly(new Script("bar", 2)), DatabaseManoeuvre.ForwardOnly(new Script("baz", 3)) };
+        public List<IStep> SomeScripts = new List<IStep> { DatabaseStep.ForwardOnly(new Script("foo", 1)), DatabaseStep.ForwardOnly(new Script("bar", 2)), DatabaseStep.ForwardOnly(new Script("baz", 3)) };
 
         private Mock<IVersionRespository> _mockVersionRepository;
         private Mock<IAppliedScriptsRepository> _mockAppliedScriptsRepository;
@@ -32,7 +32,7 @@ namespace soothsayer.Tests.Migrations
         public void when_there_are_no_migration_scripts_then_none_are_ever_executed()
         {
             var migration = new UpMigration(_mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);
-            migration.Migrate(Enumerable.Empty<IManoeuvre>(), null, null, _mockScriptRunner.Object, Some.String(), Some.String());
+            migration.Migrate(Enumerable.Empty<IStep>(), null, null, _mockScriptRunner.Object, Some.String(), Some.String());
 
             _mockScriptRunner.Verify(m => m.Execute(It.IsAny<IScript>()), Times.Never);
         }

@@ -19,20 +19,20 @@ namespace soothsayer.Oracle
             _connection = connection;
         }
 
-        public IEnumerable<IManoeuvre> GetAppliedScripts(string schema)
+        public IEnumerable<IStep> GetAppliedScripts(string schema)
         {
             try
             {
                 var appliedScripts = _connection.Query<AppliedScriptDto>(@"select version, v.script_name as scriptname, forward_script as forwardscript, backward_script as backwardscript from {0}.versions v join {0}.appliedscripts ap on v.id = ap.version_id order by version desc".FormatWith(schema));
 
-                return appliedScripts.Select(s => new DatabaseManoeuvre(new StoredScript(s.Version, s.ScriptName, s.ForwardScript), new StoredScript(s.Version, "RB_" + s.ScriptName, s.BackwardScript)));
+                return appliedScripts.Select(s => new DatabaseStep(new StoredScript(s.Version, s.ScriptName, s.ForwardScript), new StoredScript(s.Version, "RB_" + s.ScriptName, s.BackwardScript)));
             }
             catch (OracleException oracleException)
             {
                 if (oracleException.IsFor(OracleErrors.TableOrViewDoesNotExist))
                 {
                     Output.Warn("Applied scripts table in schema '{0}' could not be found.".FormatWith(schema));
-                    return Enumerable.Empty<IManoeuvre>();
+                    return Enumerable.Empty<IStep>();
                 }
 
                 throw;

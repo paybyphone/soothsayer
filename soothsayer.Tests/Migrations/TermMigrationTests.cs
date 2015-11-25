@@ -28,7 +28,7 @@ namespace soothsayer.Tests.Migrations
             _mockMetadataProvider.Setup(m => m.SchemaExists(It.IsAny<string>())).Returns(false);
 
             var migration = new TermMigration(_mockMetadataProvider.Object, false);
-            migration.Migrate(Enumerable.Empty<IManoeuvre>(), null, null, _mockScriptRunner.Object, "someSchema", "someTablespace");
+            migration.Migrate(Enumerable.Empty<IStep>(), null, null, _mockScriptRunner.Object, "someSchema", "someTablespace");
 
             _mockScriptRunner.Verify(m => m.Execute(It.IsAny<IScript>()), Times.Never);
         }

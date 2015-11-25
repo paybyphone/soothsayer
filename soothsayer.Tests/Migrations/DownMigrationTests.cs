@@ -12,7 +12,7 @@ namespace soothsayer.Tests.Migrations
     [TestFixture]
     public class DownMigrationTests
     {
-        public List<IManoeuvre> SomeScripts = new List<IManoeuvre> { DatabaseManoeuvre.BackwardOnly(new Script("foo", 1)), DatabaseManoeuvre.BackwardOnly(new Script("bar", 2)), DatabaseManoeuvre.BackwardOnly(new Script("baz", 3)) };
+        public List<IStep> SomeScripts = new List<IStep> { DatabaseStep.BackwardOnly(new Script("foo", 1)), DatabaseStep.BackwardOnly(new Script("bar", 2)), DatabaseStep.BackwardOnly(new Script("baz", 3)) };
 
         private Mock<IDatabaseMetadataProvider> _mockMetadataProvider;
         private Mock<IVersionRespository> _mockVersionRepository;
@@ -36,7 +36,7 @@ namespace soothsayer.Tests.Migrations
             _mockMetadataProvider.Setup(m => m.SchemaExists(It.IsAny<string>())).Returns(false);
 
             var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);
-            migration.Migrate(Enumerable.Empty<IManoeuvre>(), null, null, _mockScriptRunner.Object, Some.String(), Some.String());
+            migration.Migrate(Enumerable.Empty<IStep>(), null, null, _mockScriptRunner.Object, Some.String(), Some.String());
 
             _mockScriptRunner.Verify(m => m.Execute(It.IsAny<IScript>()), Times.Never);
         }
