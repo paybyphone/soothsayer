@@ -47,7 +47,7 @@ namespace soothsayer.Commands
                 }
 
                 Output.Text("Migration scripts should be located in '{0}'.".FormatWith(migrateCommandOptions.InputFolder));
-                Output.Info("The target environment is: {0}".FormatWith(migrateCommandOptions.Environment));
+                Output.Info("The target environment is: {0}".FormatWith(migrateCommandOptions.Environment.Join()));
                 Output.Text("Scripts will be run against the following schema '{0}' using username '{1}'.".FormatWith(migrateCommandOptions.Schema, migrateCommandOptions.Username));
 
                 Output.Text(migrateCommandOptions.Version.HasValue
@@ -58,13 +58,13 @@ namespace soothsayer.Commands
 
                 var databaseConnectionInfo = new DatabaseConnectionInfo(migrateCommandOptions.ConnectionString, migrateCommandOptions.Username, password);
                 var migrationInfo = new MigrationInfo(migrateCommandOptions.Down ? MigrationDirection.Down : MigrationDirection.Up,
-                                        migrateCommandOptions.InputFolder,
-                                        migrateCommandOptions.Schema,
-                                        migrateCommandOptions.Tablespace,
-                                        migrateCommandOptions.Environment,
-                                        migrateCommandOptions.Version,
-                                        migrateCommandOptions.UseStored,
-                                        migrateCommandOptions.Force);
+                                                      migrateCommandOptions.InputFolder,
+                                                      migrateCommandOptions.Schema,
+                                                      migrateCommandOptions.Tablespace,
+                                                      migrateCommandOptions.Environment,
+                                                      migrateCommandOptions.Version,
+                                                      migrateCommandOptions.UseStored,
+                                                      migrateCommandOptions.Force);
 
                 _migrator.Migrate(databaseConnectionInfo, migrationInfo);
 
