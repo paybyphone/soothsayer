@@ -104,10 +104,10 @@ namespace soothsayer.Tests
         {
             const string downScriptPath = "RB_20150406_scriptpath";
             _mockScriptScannerFactory.GetMock(ScriptFolders.Down).Setup(m => m.Scan(It.IsAny<string>(), It.IsAny<string>())).Returns(new[] { new Script(downScriptPath, 1) });
-            
+
             _migrator.Migrate(Some.ConnectionInfo(), new MigrationInfo(direction: MigrationDirection.Down, scriptFolder: Some.String(), targetSchema: "testSchema",
                 targetTablespace: "testTablespace", targetEnvironment: Some.ListOf(Some.String()), targetVersion: null, useStored: true));
-            
+
             _mockAppliedScriptRespository.Verify(m => m.GetAppliedScripts("testSchema"), Times.Once);
         }
     }

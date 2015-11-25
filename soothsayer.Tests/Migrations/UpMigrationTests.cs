@@ -49,6 +49,17 @@ namespace soothsayer.Tests.Migrations
         }
 
         [Test]
+        public void for_each_migration_script_upgraded_their_scripts_are_added()
+        {
+            var migration = new UpMigration(_mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);
+            migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String());
+
+            _mockAppliedScriptsRepository.Verify(m => m.InsertAppliedScript(SomeScripts[0].ForwardScript.AsDatabaseVersion(), It.IsAny<string>(), SomeScripts[0].ForwardScript, SomeScripts[0].BackwardScript), Times.Once);
+            _mockAppliedScriptsRepository.Verify(m => m.InsertAppliedScript(SomeScripts[1].ForwardScript.AsDatabaseVersion(), It.IsAny<string>(), SomeScripts[1].ForwardScript, SomeScripts[1].BackwardScript), Times.Once);
+            _mockAppliedScriptsRepository.Verify(m => m.InsertAppliedScript(SomeScripts[2].ForwardScript.AsDatabaseVersion(), It.IsAny<string>(), SomeScripts[2].ForwardScript, SomeScripts[2].BackwardScript), Times.Once);
+        }
+
+        [Test]
         public void if_a_migration_script_fails_then_the_following_migration_scripts_do_not_run()
         {
             var migration = new UpMigration(_mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);

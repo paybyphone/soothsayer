@@ -1,4 +1,6 @@
-﻿namespace soothsayer.Scripts
+﻿using soothsayer.Infrastructure;
+
+namespace soothsayer.Scripts
 {
     public class DatabaseStep : IStep
     {
@@ -16,7 +18,7 @@
             ForwardScript = forwardScript;
             BackwardScript = backwardScript;
         }
-        
+
         public IScript ForwardScript { get; private set; }
 
         public IScript BackwardScript { get; private set; }
