@@ -65,17 +65,20 @@ namespace soothsayer
 
                 VerifyDownScripts(upScripts, downScripts);
 
-                var storedManoeuvres = new List<IManoeuvre>();
+                var storedMigrationSteps = new List<IStep>();
+
                 if (migrationInfo.UseStored)
                 {
                     Output.Info("--usestored was specified, fetching set of applied scripts stored in the target database...".FormatWith());
-                    storedManoeuvres = oracleAppliedScriptsRepository.GetAppliedScripts(migrationInfo.TargetSchema).ToList();
-                    Output.Text("    {0} stored applied scripts found.".FormatWith(storedManoeuvres.Count));
+
+                    storedMigrationSteps = oracleAppliedScriptsRepository.GetAppliedScripts(migrationInfo.TargetSchema).ToList();
+
+                    Output.Text("    {0} stored applied scripts found.".FormatWith(storedMigrationSteps.Count));
                     Output.EmptyLine();
                 }
 
                 var scriptRunner = _scriptRunnerFactory.Create(databaseConnectionInfo);
-                RunMigration(migrationInfo, currentVersion, initScripts, upScripts, downScripts, termScripts, storedManoeuvres, scriptRunner, oracleMetadataProvider, oracleVersioning, oracleAppliedScriptsRepository);
+                RunMigration(migrationInfo, currentVersion, initScripts, upScripts, downScripts, termScripts, storedMigrationSteps, scriptRunner, oracleMetadataProvider, oracleVersioning, oracleAppliedScriptsRepository);
 
                 if (oracleMetadataProvider.SchemaExists(migrationInfo.TargetSchema))
                 {
@@ -120,30 +123,30 @@ namespace soothsayer
             }
         }
 
-        private static void RunMigration(MigrationInfo migrationInfo, DatabaseVersion currentVersion, IEnumerable<Script> initScripts, IEnumerable<Script> upScripts, IEnumerable<Script> downScripts, IEnumerable<Script> termScripts, 
-            IList<IManoeuvre> storedManoeuvres, IScriptRunner scriptRunner, IDatabaseMetadataProvider databaseMetadataProvider, IVersionRespository versionRespository, IAppliedScriptsRepository appliedScriptsRepository)
+        private static void RunMigration(MigrationInfo migrationInfo, DatabaseVersion currentVersion, IEnumerable<Script> initScripts, IEnumerable<Script> upScripts, IEnumerable<Script> downScripts, IEnumerable<Script> termScripts,
+            IList<IStep> storedSteps, IScriptRunner scriptRunner, IDatabaseMetadataProvider databaseMetadataProvider, IVersionRespository versionRespository, IAppliedScriptsRepository appliedScriptsRepository)
         {
-            var upDownManoeuvres = upScripts.Select(u => new DatabaseManoeuvre(u, downScripts.FirstOrDefault(d => d.Version == u.Version))).ToList();
-            var initTermManoeuvres = initScripts.Select(i => new DatabaseManoeuvre(i, termScripts.FirstOrDefault(t => t.Version == i.Version))).ToList();
+            var upDownSteps = upScripts.Select(u => new DatabaseStep(u, downScripts.FirstOrDefault(d => d.Version == u.Version))).ToList();
+            var initTermSteps = initScripts.Select(i => new DatabaseStep(i, termScripts.FirstOrDefault(t => t.Version == i.Version))).ToList();
 
             if (migrationInfo.Direction == MigrationDirection.Down)
             {
                 var downMigration = new DownMigration(databaseMetadataProvider, versionRespository, appliedScriptsRepository, migrationInfo.Forced);
 
-                if (storedManoeuvres.Any())
+                if (storedSteps.Any())
                 {
                     Output.Warn("NOTE: Using stored applied scripts to perform downgrade instead of local 'down' scripts.");
-                    downMigration.Migrate(storedManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
+                    downMigration.Migrate(storedSteps, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
                 }
                 else
                 {
-                    downMigration.Migrate(upDownManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
+                    downMigration.Migrate(upDownSteps, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
                 }
-                
+
                 if (!migrationInfo.TargetVersion.HasValue)
                 {
                     var termMigration = new TermMigration(databaseMetadataProvider, migrationInfo.Forced);
-                    termMigration.Migrate(initTermManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
+                    termMigration.Migrate(initTermSteps, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
                 }
                 else
                 {
@@ -153,13 +156,13 @@ namespace soothsayer
             else
             {
                 var initMigration = new InitMigration(databaseMetadataProvider, migrationInfo.Forced);
-                initMigration.Migrate(initTermManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
+                initMigration.Migrate(initTermSteps, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
 
                 EnsureVersioningTableIsInitialised(versionRespository, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
                 EnsureAppliedScriptsTableIsInitialised(appliedScriptsRepository, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
-                
+
                 var upMigration = new UpMigration(versionRespository, appliedScriptsRepository, migrationInfo.Forced);
-                upMigration.Migrate(upDownManoeuvres, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
+                upMigration.Migrate(upDownSteps, currentVersion, migrationInfo.TargetVersion, scriptRunner, migrationInfo.TargetSchema, migrationInfo.TargetTablespace);
             }
         }
 

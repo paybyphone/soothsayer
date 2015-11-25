@@ -5,7 +5,7 @@ namespace soothsayer
 {
     public interface IAppliedScriptsRepository
     {
-        IEnumerable<IManoeuvre> GetAppliedScripts(string schema);
+        IEnumerable<IStep> GetAppliedScripts(string schema);
         void InsertAppliedScript(DatabaseVersion version, string schema, IScript script, IScript rollbackScript = null);
         void RemoveAppliedScript(DatabaseVersion version, string schema);
 

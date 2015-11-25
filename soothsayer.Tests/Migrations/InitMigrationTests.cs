@@ -11,7 +11,7 @@ namespace soothsayer.Tests.Migrations
     [TestFixture]
     public class InitMigrationTests
     {
-        public List<IManoeuvre> SomeScripts = new List<IManoeuvre> { DatabaseManoeuvre.ForwardOnly(new Script("foo", 1)), DatabaseManoeuvre.ForwardOnly(new Script("bar", 2)) };
+        public List<IStep> SomeScripts = new List<IStep> { DatabaseStep.ForwardOnly(new Script("foo", 1)), DatabaseStep.ForwardOnly(new Script("bar", 2)) };
 
         private Mock<IDatabaseMetadataProvider> _mockMetadataProvider;
         private Mock<IVersionRespository> _mockVersionRepository;
@@ -31,7 +31,7 @@ namespace soothsayer.Tests.Migrations
         public void when_there_are_no_migration_scripts_then_none_are_ever_executed()
         {
             var migration = new InitMigration(_mockMetadataProvider.Object, false);
-            migration.Migrate(Enumerable.Empty<IManoeuvre>(), null, null, _mockScriptRunner.Object, Some.String(), Some.String());
+            migration.Migrate(Enumerable.Empty<IStep>(), null, null, _mockScriptRunner.Object, Some.String(), Some.String());
 
             _mockScriptRunner.Verify(m => m.Execute(It.IsAny<IScript>()), Times.Never);
         }

@@ -12,7 +12,7 @@ namespace soothsayer.Tests.Migrations
     [TestFixture]
     public class UpMigrationTests
     {
-        public List<IManoeuvre> SomeScripts = new List<IManoeuvre> { DatabaseManoeuvre.ForwardOnly(new Script("foo", 1)), DatabaseManoeuvre.ForwardOnly(new Script("bar", 2)), DatabaseManoeuvre.ForwardOnly(new Script("baz", 3)) };
+        public List<IStep> SomeScripts = new List<IStep> { DatabaseStep.ForwardOnly(new Script("foo", 1)), DatabaseStep.ForwardOnly(new Script("bar", 2)), DatabaseStep.ForwardOnly(new Script("baz", 3)) };
 
         private Mock<IVersionRespository> _mockVersionRepository;
         private Mock<IAppliedScriptsRepository> _mockAppliedScriptsRepository;
@@ -32,7 +32,7 @@ namespace soothsayer.Tests.Migrations
         public void when_there_are_no_migration_scripts_then_none_are_ever_executed()
         {
             var migration = new UpMigration(_mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);
-            migration.Migrate(Enumerable.Empty<IManoeuvre>(), null, null, _mockScriptRunner.Object, Some.String(), Some.String());
+            migration.Migrate(Enumerable.Empty<IStep>(), null, null, _mockScriptRunner.Object, Some.String(), Some.String());
 
             _mockScriptRunner.Verify(m => m.Execute(It.IsAny<IScript>()), Times.Never);
         }
@@ -46,6 +46,17 @@ namespace soothsayer.Tests.Migrations
             _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[0].ForwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
             _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[1].ForwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
             _mockVersionRepository.Verify(m => m.InsertVersion(SomeScripts[2].ForwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
+        public void for_each_migration_script_upgraded_their_scripts_are_added()
+        {
+            var migration = new UpMigration(_mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);
+            migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String());
+
+            _mockAppliedScriptsRepository.Verify(m => m.InsertAppliedScript(SomeScripts[0].ForwardScript.AsDatabaseVersion(), It.IsAny<string>(), SomeScripts[0].ForwardScript, SomeScripts[0].BackwardScript), Times.Once);
+            _mockAppliedScriptsRepository.Verify(m => m.InsertAppliedScript(SomeScripts[1].ForwardScript.AsDatabaseVersion(), It.IsAny<string>(), SomeScripts[1].ForwardScript, SomeScripts[1].BackwardScript), Times.Once);
+            _mockAppliedScriptsRepository.Verify(m => m.InsertAppliedScript(SomeScripts[2].ForwardScript.AsDatabaseVersion(), It.IsAny<string>(), SomeScripts[2].ForwardScript, SomeScripts[2].BackwardScript), Times.Once);
         }
 
         [Test]

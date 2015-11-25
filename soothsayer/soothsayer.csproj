@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="IAppliedScriptsRepositoryFactory.cs" />
     <Compile Include="ICreateFromDatabaseConnection.cs" />
+    <Compile Include="Infrastructure\Must.cs" />
     <Compile Include="Oracle\AppliedScriptDto.cs" />
     <Compile Include="Oracle\OracleAppliedScriptsRepository.cs" />
     <Compile Include="Commands\DatabaseCommand.cs" />
@@ -115,8 +116,8 @@
     <Compile Include="Scanners\InitScriptScanner.cs" />
     <Compile Include="Scanners\IScriptScannerFactory.cs" />
     <Compile Include="Scanners\ScriptScannerFactory.cs" />
-    <Compile Include="Scripts\DatabaseManoeuvre.cs" />
-    <Compile Include="Scripts\IManoeuvre.cs" />
+    <Compile Include="Scripts\DatabaseStep.cs" />
+    <Compile Include="Scripts\IStep.cs" />
     <Compile Include="Scripts\IScript.cs" />
     <Compile Include="Scanners\IScriptScanner.cs" />
     <Compile Include="Infrastructure\IO\Output.cs" />

@@ -18,11 +18,11 @@ namespace soothsayer.Migrations
             _force = force;
         }
 
-        public void Migrate(IEnumerable<IManoeuvre> migrationManoeuvres, DatabaseVersion currentVersion, long? targetVersion, IScriptRunner scriptRunner, string schema, string tablespace)
+        public void Migrate(IEnumerable<IStep> migrationSteps, DatabaseVersion currentVersion, long? targetVersion, IScriptRunner scriptRunner, string schema, string tablespace)
         {
             if (!_databaseMetadataProvider.SchemaExists(schema))
             {
-                InitialiseDatabase(migrationManoeuvres.Select(m => m.ForwardScript), scriptRunner, schema);
+                InitialiseDatabase(migrationSteps.Select(m => m.ForwardScript), scriptRunner, schema);
             }
         }
 

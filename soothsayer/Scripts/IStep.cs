@@ -1,6 +1,6 @@
 ﻿namespace soothsayer.Scripts
 {
-    public interface IManoeuvre
+    public interface IStep
     {
         IScript ForwardScript { get; }
 
