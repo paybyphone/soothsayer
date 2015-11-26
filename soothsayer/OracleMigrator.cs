@@ -94,7 +94,8 @@ namespace soothsayer
 
         private static IEnumerable<Script> ScanForScripts(MigrationInfo migrationInfo, string migrationFolder, IScriptScanner scanner)
         {
-            var scripts = (scanner.Scan(migrationInfo.ScriptFolder.Whack(migrationFolder), migrationInfo.TargetEnvironment.ToArray()) ?? Enumerable.Empty<Script>()).ToArray();
+            var environments = (migrationInfo.TargetEnvironment ?? Enumerable.Empty<string>()).ToArray();
+            var scripts = (scanner.Scan(migrationInfo.ScriptFolder.Whack(migrationFolder), environments) ?? Enumerable.Empty<Script>()).ToArray();
 
             Output.Text("Found the following '{0}' scripts:".FormatWith(migrationFolder));
 

@@ -110,5 +110,15 @@ namespace soothsayer.Tests
 
             _mockAppliedScriptRespository.Verify(m => m.GetAppliedScripts("testSchema"), Times.Once);
         }
+
+        [Test]
+        public void when_target_environment_is_not_provided_then_there_are_no_errors()
+        {
+            var migrationInfo = new MigrationInfo(direction: MigrationDirection.Up, scriptFolder: Some.String(), targetSchema: "testSchema",
+                targetTablespace: "testTablespace", targetEnvironment: null, targetVersion: null);
+
+            Assert.DoesNotThrow(() => _migrator.Migrate(Some.ConnectionInfo(), migrationInfo));
+        }
+
     }
 }
