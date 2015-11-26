@@ -97,11 +97,11 @@ namespace soothsayer
             var environments = (migrationInfo.TargetEnvironment ?? Enumerable.Empty<string>()).ToArray();
             var scripts = (scanner.Scan(migrationInfo.ScriptFolder.Whack(migrationFolder), environments) ?? Enumerable.Empty<Script>()).ToArray();
 
-            Output.Text("Found the following '{0}' scripts:".FormatWith(migrationFolder));
+            Output.Text("Found {0} '{1}' scripts.".FormatWith(scripts.Length, migrationFolder));
 
             foreach (var script in scripts)
             {
-                Output.Text(script.Name, 1);
+                Output.Verbose(script.Name, 1);
             }
 
             return scripts;

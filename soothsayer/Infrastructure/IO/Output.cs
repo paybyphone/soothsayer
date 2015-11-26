@@ -20,9 +20,13 @@ namespace soothsayer.Infrastructure.IO
 
         public static void Verbose(string message)
         {
+            Verbose(message, 0);
+        }
+        public static void Verbose(string message, int indent)
+        {
             if (!Concise)
             {
-                ConsoleProvider.WriteLine(message);
+                ConsoleProvider.WriteLine(Spaces(indent) + message);
             }
         }
 
