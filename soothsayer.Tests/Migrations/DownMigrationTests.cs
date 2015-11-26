@@ -114,9 +114,9 @@ namespace soothsayer.Tests.Migrations
 
             Ignore.Exception(() => migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String()));
 
-            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[0].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[2].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
             _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[1].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Never);
-            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[2].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Never);
+            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[0].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -131,9 +131,9 @@ namespace soothsayer.Tests.Migrations
 
             Ignore.Exception(() => migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String()));
 
-            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[0].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
-            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[1].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
             _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[2].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[1].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[0].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
         }
     }
 }
