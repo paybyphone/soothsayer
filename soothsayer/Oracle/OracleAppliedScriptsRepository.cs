@@ -38,7 +38,7 @@ namespace soothsayer.Oracle
                 throw;
             }
         }
-        
+
         public void InsertAppliedScript(DatabaseVersion version, string schema, IScript script, IScript rollbackScript = null)
         {
             var reader = new ScriptReader();

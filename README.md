@@ -65,8 +65,6 @@ When executing _soothsayer_, the environment can be specified through the `-e/--
 
 Only scripts which either do not specify an environment, or match the specified environment will be executed as part of the migration. This makes it easy to mark particular scripts (e.g. test data scripts) as only needing to be run in certain environments.
 
-By default, the environment is set to `dev`.
-
 ## Stored Applied Scripts ##
 As scripts are executed against the database, they are also stored in the target schema. Both the roll forward and roll back scripts for the version migrated are stored (if there is a roll back script).
 
