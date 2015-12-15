@@ -5,6 +5,6 @@ namespace soothsayer.Migrations
 {
     public interface IMigration
     {
-        void Migrate(IEnumerable<IScript> migrationScripts, DatabaseVersion currentVersion, long? targetVersionNumber, IScriptRunner scriptRunner, string schema, string tablespace);
+        void Migrate(IEnumerable<IStep> migrationSteps, DatabaseVersion currentVersion, long? targetVersionNumber, IScriptRunner scriptRunner, string schema, string tablespace);
     }
 }

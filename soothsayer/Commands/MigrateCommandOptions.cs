@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using System.Collections.Generic;
+using CommandLine;
 using CommandLine.Text;
 
 namespace soothsayer.Commands
@@ -33,9 +34,9 @@ namespace soothsayer.Commands
 			HelpText = "The input folder containing both the roll-forward (up) and roll-back (down) sql scripts.")]
         public string InputFolder { get; set; }
 
-        [Option('e', "environment", Required = false, DefaultValue = "dev",
-          HelpText = "The environment of the target Oracle instance. This enables running of environment specific scripts.")]
-        public string Environment { get; set; }
+        [OptionList('e', "environment", Required = false, Separator = ',',
+          HelpText = "The environment of the target Oracle instance. This enables running of environment specific scripts. More than one environment can be specified, separated by a comma.")]
+        public IList<string> Environment { get; set; }
 
         [Option('v', "version", Required = false,
 			HelpText = "The target database version to migrate up (or down) to. Migration will stop if the next script will bring the database to a higher version than specified here (or lower in the case of roll-backs).")]
@@ -48,6 +49,10 @@ namespace soothsayer.Commands
         [Option("concise", Required = false,
             HelpText = "Suppresses verbose information (such as SqlPlus output)")]
         public bool Concise { get; set; }
+
+        [Option("usestored", Required = false, DefaultValue = false, MutuallyExclusiveSet = "downgrade",
+            HelpText = "Tells soothsayer to ignore the down migration script files and use the stored scripts in the target database schema.")]
+        public bool UseStored { get; set; }
 
         [Option("force", Required = false, DefaultValue = false,
             HelpText = "Tells soothsayer to ignore any errors from executing scripts within SQL*Plus and continue execution of all the scripts.")]

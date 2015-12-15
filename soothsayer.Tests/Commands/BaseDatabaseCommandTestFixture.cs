@@ -1,6 +1,5 @@
 ﻿using Moq;
 using NUnit.Framework;
-using soothsayer.Infrastructure;
 using soothsayer.Infrastructure.IO;
 
 namespace soothsayer.Tests.Commands

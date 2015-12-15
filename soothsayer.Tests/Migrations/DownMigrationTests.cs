@@ -12,10 +12,11 @@ namespace soothsayer.Tests.Migrations
     [TestFixture]
     public class DownMigrationTests
     {
-        public List<IScript> SomeScripts = new List<IScript> { new Script("foo", 1), new Script("bar", 2), new Script("baz", 3) };
+        public List<IStep> SomeScripts = new List<IStep> { DatabaseStep.BackwardOnly(new Script("foo", 1)), DatabaseStep.BackwardOnly(new Script("bar", 2)), DatabaseStep.BackwardOnly(new Script("baz", 3)) };
 
         private Mock<IDatabaseMetadataProvider> _mockMetadataProvider;
         private Mock<IVersionRespository> _mockVersionRepository;
+        private Mock<IAppliedScriptsRepository> _mockAppliedScriptsRepository;
         private Mock<IScriptRunner> _mockScriptRunner;
 
         [SetUp]
@@ -25,6 +26,7 @@ namespace soothsayer.Tests.Migrations
 
             _mockMetadataProvider = new Mock<IDatabaseMetadataProvider>();
             _mockVersionRepository = new Mock<IVersionRespository>();
+            _mockAppliedScriptsRepository = new Mock<IAppliedScriptsRepository>();
             _mockScriptRunner = new Mock<IScriptRunner>();
         }
 
@@ -33,8 +35,8 @@ namespace soothsayer.Tests.Migrations
         {
             _mockMetadataProvider.Setup(m => m.SchemaExists(It.IsAny<string>())).Returns(false);
 
-            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, false);
-            migration.Migrate(Enumerable.Empty<IScript>(), null, null, _mockScriptRunner.Object, Some.String(), Some.String());
+            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);
+            migration.Migrate(Enumerable.Empty<IStep>(), null, null, _mockScriptRunner.Object, Some.String(), Some.String());
 
             _mockScriptRunner.Verify(m => m.Execute(It.IsAny<IScript>()), Times.Never);
         }
@@ -44,7 +46,7 @@ namespace soothsayer.Tests.Migrations
         {
             _mockMetadataProvider.Setup(m => m.SchemaExists(It.IsAny<string>())).Returns(false);
 
-            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, false);
+            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);
             migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String());
 
             _mockScriptRunner.Verify(m => m.Execute(It.IsAny<IScript>()), Times.Never);
@@ -56,7 +58,7 @@ namespace soothsayer.Tests.Migrations
             _mockMetadataProvider.Setup(m => m.SchemaExists(It.IsAny<string>())).Returns(true);
             _mockVersionRepository.Setup(m => m.GetCurrentVersion(It.IsAny<string>())).Returns((DatabaseVersion)null);
 
-            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, false);
+            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);
             migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String());
 
             _mockScriptRunner.Verify(m => m.Execute(It.IsAny<IScript>()), Times.Never);
@@ -68,7 +70,7 @@ namespace soothsayer.Tests.Migrations
             _mockMetadataProvider.Setup(m => m.SchemaExists(It.IsAny<string>())).Returns(true);
             _mockVersionRepository.Setup(m => m.GetCurrentVersion(It.IsAny<string>())).Returns(new DatabaseVersion(1234, Some.String()));
 
-            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, false);
+            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);
             migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String());
 
             _mockScriptRunner.Verify(m => m.Execute(It.IsAny<IScript>()), Times.Exactly(3));
@@ -80,45 +82,58 @@ namespace soothsayer.Tests.Migrations
             _mockMetadataProvider.Setup(m => m.SchemaExists(It.IsAny<string>())).Returns(true);
             _mockVersionRepository.Setup(m => m.GetCurrentVersion(It.IsAny<string>())).Returns(new DatabaseVersion(1234, Some.String()));
 
-            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, false);
+            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);
             migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String());
 
-            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[0].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
-            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[1].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[0].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[1].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
-        public void if_a_migration_script_fails_then_the_following_migration_scripts_do_not_run()
+        public void for_each_migration_script_downgraded_then_any_applied_script_stored_is_removed()
         {
             _mockMetadataProvider.Setup(m => m.SchemaExists(It.IsAny<string>())).Returns(true);
             _mockVersionRepository.Setup(m => m.GetCurrentVersion(It.IsAny<string>())).Returns(new DatabaseVersion(1234, Some.String()));
 
-            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, false);
+            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);
+            migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String());
 
-            _mockScriptRunner.Setup(m => m.Execute(SomeScripts[1])).Throws(new SqlPlusException());
-
-            Ignore.Exception(() => migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String()));
-
-            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[0].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
-            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[1].AsDatabaseVersion(), It.IsAny<string>()), Times.Never);
-            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[2].AsDatabaseVersion(), It.IsAny<string>()), Times.Never);
+            _mockAppliedScriptsRepository.Verify(m => m.RemoveAppliedScript(SomeScripts[0].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockAppliedScriptsRepository.Verify(m => m.RemoveAppliedScript(SomeScripts[1].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
-        public void if_force_is_specified_then_the_migration_scripts_will_still_run()
+        public void if_a_migration_script_fails_then_the_subsequent_migration_scripts_do_not_run()
         {
             _mockMetadataProvider.Setup(m => m.SchemaExists(It.IsAny<string>())).Returns(true);
             _mockVersionRepository.Setup(m => m.GetCurrentVersion(It.IsAny<string>())).Returns(new DatabaseVersion(1234, Some.String()));
 
-            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, true);
+            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, false);
 
-            _mockScriptRunner.Setup(m => m.Execute(SomeScripts[1])).Throws(new SqlPlusException());
+            _mockScriptRunner.Setup(m => m.Execute(SomeScripts[1].BackwardScript)).Throws(new SqlPlusException());
 
             Ignore.Exception(() => migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String()));
 
-            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[0].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
-            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[1].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
-            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[2].AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[2].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[1].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Never);
+            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[0].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public void if_force_is_specified_then_the_subsequent_migration_scripts_will_still_run()
+        {
+            _mockMetadataProvider.Setup(m => m.SchemaExists(It.IsAny<string>())).Returns(true);
+            _mockVersionRepository.Setup(m => m.GetCurrentVersion(It.IsAny<string>())).Returns(new DatabaseVersion(1234, Some.String()));
+
+            var migration = new DownMigration(_mockMetadataProvider.Object, _mockVersionRepository.Object, _mockAppliedScriptsRepository.Object, true);
+
+            _mockScriptRunner.Setup(m => m.Execute(SomeScripts[1].BackwardScript)).Throws(new SqlPlusException());
+
+            Ignore.Exception(() => migration.Migrate(SomeScripts, null, null, _mockScriptRunner.Object, Some.String(), Some.String()));
+
+            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[2].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[1].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
+            _mockVersionRepository.Verify(m => m.RemoveVersion(SomeScripts[0].BackwardScript.AsDatabaseVersion(), It.IsAny<string>()), Times.Once);
         }
     }
 }

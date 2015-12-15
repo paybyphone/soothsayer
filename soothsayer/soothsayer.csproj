@@ -44,8 +44,13 @@
     <Reference Include="LibZ.Bootstrap">
       <HintPath>..\packages\LibZ.Bootstrap.1.1.0.2\lib\net40-client\LibZ.Bootstrap.dll</HintPath>
     </Reference>
-    <Reference Include="Oracle.ManagedDataAccess">
-      <HintPath>..\packages\odp.net.managed.121.1.2\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    <Reference Include="Moq, Version=4.2.1502.911, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\packages\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.12.1.2400\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System">
       <Private>False</Private>
@@ -59,11 +64,17 @@
     <Reference Include="System.Data.OracleClient" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAppliedScriptsRepositoryFactory.cs" />
+    <Compile Include="ICreateFromDatabaseConnection.cs" />
+    <Compile Include="Infrastructure\Must.cs" />
+    <Compile Include="Oracle\AppliedScriptDto.cs" />
+    <Compile Include="Oracle\OracleAppliedScriptsRepository.cs" />
     <Compile Include="Commands\DatabaseCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ListCommand.cs" />
     <Compile Include="Commands\MigrateCommand.cs" />
     <Compile Include="Commands\IDatabaseCommandOptions.cs" />
+    <Compile Include="IAppliedScriptsRepository.cs" />
     <Compile Include="IDatabaseMetadataProviderFactory.cs" />
     <Compile Include="Infrastructure\Configuration\ConfigSection.cs" />
     <Compile Include="Infrastructure\IO\ColorConsoleAdapter.cs" />
@@ -94,6 +105,7 @@
     <Compile Include="IScriptRunner.cs" />
     <Compile Include="IConnectionFactory.cs" />
     <Compile Include="IVersionRespositoryFactory.cs" />
+    <Compile Include="Oracle\OracleAppliedScriptsRepositoryFactory.cs" />
     <Compile Include="Oracle\OracleMetadataProvider.cs" />
     <Compile Include="Oracle\OracleVersionRespositoryFactory.cs" />
     <Compile Include="Scanners\DownScriptScanner.cs" />
@@ -104,6 +116,8 @@
     <Compile Include="Scanners\InitScriptScanner.cs" />
     <Compile Include="Scanners\IScriptScannerFactory.cs" />
     <Compile Include="Scanners\ScriptScannerFactory.cs" />
+    <Compile Include="Scripts\DatabaseStep.cs" />
+    <Compile Include="Scripts\IStep.cs" />
     <Compile Include="Scripts\IScript.cs" />
     <Compile Include="Scanners\IScriptScanner.cs" />
     <Compile Include="Infrastructure\IO\Output.cs" />
@@ -129,7 +143,10 @@
     <Compile Include="Infrastructure\StringExtensions.cs" />
     <Compile Include="Infrastructure\IO\PathExtensions.cs" />
     <Compile Include="Scripts\ScriptFolders.cs" />
+    <Compile Include="Scripts\ScriptReader.cs" />
+    <Compile Include="Scripts\StoredScript.cs" />
     <Compile Include="Scripts\SqlPlusScript.cs" />
+    <Compile Include="Scripts\UTF8.cs" />
     <Compile Include="SqlPlusScriptRunnerFactory.cs" />
     <Compile Include="TinyIoC.cs" />
     <Compile Include="Infrastructure\Slice.cs" />
