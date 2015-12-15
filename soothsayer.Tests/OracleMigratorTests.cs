@@ -74,7 +74,7 @@ namespace soothsayer.Tests
             _migrator.Migrate(Some.ConnectionInfo(), Some.MigrationInfo());
 
             _mockOutput.Verify(m => m.WriteLine("The following 'up' scripts do not have a corresponding 'down' script, any rollback may not work as expected:".Yellow()));
-            _mockOutput.Verify(m => m.WriteLine("    {0}".FormatWith(upScriptPath).DarkGray()), Times.Once());
+            _mockOutput.Verify(m => m.WriteLine("    {0}".FormatWith(upScriptPath).Yellow()), Times.Once());
         }
 
         [Test]
